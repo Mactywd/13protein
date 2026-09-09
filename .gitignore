@@ -1,0 +1,6 @@
+# Sorgente WordPress (767 MB, contiene dati personali)
+*.csv
+# Intermedio rigenerabile
+.cache/
+__pycache__/
+*.pyc
