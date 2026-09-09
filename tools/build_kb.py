@@ -13,10 +13,12 @@ import phpser
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT  = os.path.join(ROOT, "knowledgebase")
-SITE = "https://13protein.tobugroup.com"      # origin of the dump (staging)
+SITE = "https://ai.13protein.tobugroup.com"   # origin of the dump (staging)
 
 raw = json.load(open(os.path.join(ROOT, ".cache", "raw.json")))
 posts, meta, options = raw['posts'], raw['meta'], raw['options']
+terms, taxonomy, rels = raw['terms'], raw['taxonomy'], raw['rels']
+languages, translations = raw['languages'], raw['translations']
 
 # stage 1 keeps the raw WP column names; alias them to the short names used below
 ALIAS = {'post_type': 'type', 'post_mime_type': 'mime', 'post_name': 'name',
@@ -182,11 +184,30 @@ def page_md(pid):
     return "\n\n".join(ded), forms
 
 # ---------------------------------------------------------------- ACF
-ACF_SKIP = re.compile(r'^(_|footnotes$|ao_post_optimize$)')
+# `copied_media_ids` / `referenced_media_ids` are Elementor bookkeeping, not content
+ACF_SKIP = re.compile(r'^(_|footnotes$|ao_post_optimize$|copied_media_ids$|'
+                      r'referenced_media_ids$|classe_[a-z_]+$)')
 def acf(pid):
     return {k: v for k, v in meta.get(pid, {}).items()
             if not ACF_SKIP.match(k) and not k.startswith(('_elementor', '_yoast', '_wp', 'inline_featured'))
             and v not in ('', 'field_')}
+
+# ------------------------------------------------------------- taxonomy
+# the blog now carries real categories/tags (the post bodies are still placeholder)
+post_terms = collections.defaultdict(lambda: collections.defaultdict(list))
+for r in rels:
+    tt = taxonomy.get(r['term_taxonomy_id'])
+    if not tt or tt['taxonomy'] not in ('category', 'post_tag'):
+        continue
+    name = clean(terms.get(tt['term_id'], {}).get('name', ''))
+    if name:
+        post_terms[r['object_id']][tt['taxonomy']].append(name)
+
+def cats(pid): return sorted(post_terms[pid]['category'])
+def tags(pid): return sorted(post_terms[pid]['post_tag'])
+
+# WPML: every language is configured but all content still sits in the source language
+lang_of = {t['element_id']: t['language_code'] for t in translations}
 
 def seo(pid):
     m = meta.get(pid, {})
@@ -201,8 +222,12 @@ def unphp(v):
         return v
 
 # ================================================================ OUTPUT
+# wipe first: a page that gets unpublished must disappear, not linger as a stale file
 for d in ('pages', 'products', 'site'):
     os.makedirs(f"{OUT}/{d}", exist_ok=True)
+    for f in os.listdir(f"{OUT}/{d}"):
+        if f.endswith(('.md', '.csv')):
+            os.remove(f"{OUT}/{d}/{f}")
 
 def slugfile(p):
     return re.sub(r'[^a-z0-9-]+', '-', (p['name'] or p['ID']).lower()).strip('-') or p['ID']
@@ -220,7 +245,12 @@ docs = []          # for the consolidated md + jsonl
 all_forms = []
 
 # ---------------------------------------------------------------- PAGES
-pages = sorted([p for p in posts.values() if p['type'] == 'page' and p['status'] == 'publish'],
+# superseded copies of the homepage left published/in draft on staging: same copy as
+# `home`, so keeping them would only duplicate every home chunk in the retrieval index
+LEGACY = re.compile(r'^home-(old|\d+)')
+
+pages = sorted([p for p in posts.values() if p['type'] == 'page'
+                and p['status'] in ('publish', 'draft') and not LEGACY.match(p['name'] or '')],
                key=lambda p: int(p['ID']))
 blog  = sorted([p for p in posts.values() if p['type'] == 'post' and p['status'] == 'publish'],
                key=lambda p: int(p['ID']))
@@ -229,15 +259,20 @@ for p in pages + blog:
     body, forms = page_md(p['ID'])
     all_forms += [(p['name'], f) for f in forms]
     s = seo(p['ID']); a = acf(p['ID'])
+    draft = p['status'] != 'publish'
     head = fm(title=p['title'], slug=p['name'], url=f"/{p['name']}", type=p['type'],
-              post_id=p['ID'], updated=p['modified'][:10], **{k: v for k, v in s.items() if v})
+              post_id=p['ID'], updated=p['modified'][:10], status=p['status'],
+              lang=lang_of.get(p['ID'], ''), categories=cats(p['ID']), tags=tags(p['ID']),
+              **{k: v for k, v in s.items() if v})
+    warn = "\n> **Bozza non pubblicata** — non è contenuto live del sito.\n" if draft else ""
     extra = ""
     if a:
         extra = "\n\n## Campi ACF\n\n" + "\n".join(f"- **{k}**: {clean(str(unphp(v)))[:300]}" for k, v in sorted(a.items()))
-    md = f"{head}# {p['title']}\n\n{body}{extra}\n"
+    md = f"{head}# {p['title']}\n{warn}\n{body}{extra}\n"
     open(f"{OUT}/pages/{slugfile(p)}.md", 'w').write(md)
     docs.append(dict(kind=p['type'], id=p['ID'], title=p['title'], slug=p['name'],
-                     url=f"{SITE}/{p['name']}", updated=p['modified'][:10], **s, body=body))
+                     url=f"{SITE}/{p['name']}", updated=p['modified'][:10], **s, body=body,
+                     status=p['status'], categories=cats(p['ID']), tags=tags(p['ID'])))
 
 # ---------------------------------------------------------------- PRODUCTS
 prods = sorted([p for p in posts.values() if p['type'] == 'product' and p['status'] == 'publish'],
@@ -251,7 +286,7 @@ for p in prods:
             m = re.match(rf'^{prefix}_(\d+)_{field}$', k)
             if m and clean(v): rows.append((int(m.group(1)), clean(v)))
         return [t for _, t in sorted(rows)]
-    cats   = rep('customization_options_list')
+    forms_ = rep('customization_options_list')     # not `cats`: that name is the taxonomy helper
     fmts   = rep('list_format_and_packaging')
     imgs   = [media.get(str(i), {}).get('file', str(i)) for i in (unphp(a.get('slideshow_iniziale', '')) or []) if i]
     head = fm(title=clean(p['title']), slug=p['name'], url=f"/{p['name']}", type="product_category",
@@ -259,7 +294,7 @@ for p in prods:
     md = [head, f"# {clean(p['title'])}", ""]
     if a.get('titolo'):  md += [f"**{clean(a['titolo'])}**", ""]
     if a.get('testo'):   md += [html2md(a['testo']), ""]
-    if cats: md += ["## Categorie di prodotto / formulazioni", ""] + [f"- {c}" for c in cats] + [""]
+    if forms_: md += ["## Categorie di prodotto / formulazioni", ""] + [f"- {c}" for c in forms_] + [""]
     if fmts: md += ["## Formati e packaging disponibili", ""] + [f"- {c}" for c in fmts] + [""]
     if a.get('frase_finale'): md += ["## Claim di chiusura", "", clean(a['frase_finale']), ""]
     if imgs: md += ["## Media", ""] + [f"- {i}" for i in imgs] + [""]
@@ -267,10 +302,14 @@ for p in prods:
     open(f"{OUT}/products/{slugfile(p)}.md", 'w').write("\n".join(md))
     docs.append(dict(kind='product_category', id=p['ID'], title=clean(p['title']), slug=p['name'],
                      url=f"{SITE}/{p['name']}", updated=p['modified'][:10], **seo(p['ID']), body=body,
-                     categories=cats, formats=fmts))
+                     status=p['status'], formulations=forms_, formats=fmts))
 
 # ---------------------------------------------------------------- SITE META
 plugins = list(unphp(options.get('active_plugins', '')) or [])
+drafts = [p for p in pages if p['status'] != 'publish']
+langs = ", ".join(f"{l['english_name']} (`{l['code']}`, {l['default_locale']})" for l in languages)
+content_langs = sorted({l for l in lang_of.values()})
+
 site_md = [fm(title="Site metadata", type="site"), "# Metadati del sito", "",
     f"- **Nome**: {options.get('blogname','')}",
     f"- **URL (staging del dump)**: {options.get('siteurl','')}",
@@ -278,9 +317,28 @@ site_md = [fm(title="Site metadata", type="site"), "# Metadati del sito", "",
     f"- **Tema**: {options.get('template','')} / child `{options.get('stylesheet','')}`",
     f"- **Pagina iniziale**: post {options.get('page_on_front','')} ({options.get('show_on_front','')})",
     f"- **Struttura permalink**: `{options.get('permalink_structure','')}`",
+    "", "## Lingue (WPML)", "",
+    f"- Lingue attivate: {langs}",
+    f"- Lingue in cui esistono davvero contenuti: {', '.join(content_langs) or 'nessuna'}",
+    "- WPML è configurato ma **nessuna pagina, prodotto o articolo è tradotto**: "
+    "esistono solo le traduzioni dei nomi di categoria. Il sito è di fatto monolingua inglese.",
     "", "## Plugin attivi", ""] + [f"- {x}" for x in plugins] + ["",
-    "## Inventario contenuti", "",
-    f"- Pagine pubblicate: {len(pages)}",
+    "## Tassonomie del blog", "",
+    "Categorie e tag esistono e i 10 articoli sono classificati, ma il testo degli articoli",
+    "è ancora un placeholder Lorem ipsum: le tassonomie indicano i temi editoriali previsti,",
+    "non contenuti disponibili.", ""]
+for txn, label in (('category', 'Categorie'), ('post_tag', 'Tag')):
+    site_md += [f"### {label}", ""]
+    for tt in taxonomy.values():
+        if tt['taxonomy'] != txn or tt['count'] == '0':
+            continue
+        n = int(tt['count'])
+        site_md.append(f"- {clean(terms.get(tt['term_id'], {}).get('name',''))} — "
+                       f"{n} articol{'o' if n == 1 else 'i'}")
+    site_md.append("")
+site_md += ["## Inventario contenuti", "",
+    f"- Pagine pubblicate: {len(pages) - len(drafts)}",
+    f"- Pagine in bozza incluse: {len(drafts)} ({', '.join(p['name'] for p in drafts) or '—'})",
     f"- Categorie prodotto: {len(prods)}",
     f"- Articoli blog: {len(blog)} (tutti duplicati dello stesso placeholder)",
     f"- Media: {len(media)}", ""]
@@ -297,7 +355,8 @@ open(f"{OUT}/site/navigation.md", 'w').write("\n".join(nav_md))
 
 # ---------------------------------------------------------------- FORMS
 f_md = [fm(title="Form di contatto", type="site"), "# Form del sito", "",
-        "_Solo la definizione dei campi. Le 23 submission con dati personali sono escluse dal knowledgebase._", ""]
+        "_Solo la definizione dei campi. Le submission (nome/email/telefono/IP) restano "
+        "nelle tabelle `e_submissions*` del dump e non entrano mai nel knowledgebase._", ""]
 seen_forms = set()
 for page_slug, st in all_forms:
     nm = clean(st.get('form_name'))
@@ -323,10 +382,12 @@ with open(f"{OUT}/site/media.csv", 'w', newline='') as fh:
 
 # ---------------------------------------------------------------- BUNDLES
 with open(f"{OUT}/knowledgebase.md", 'w') as fh:
-    fh.write("# 13 Protein — knowledgebase\n\nEstratto da `proteitobu6d54as_cjgw1.csv`. "
+    fh.write("# 13 Protein — knowledgebase\n\nEstratto da `proteitobu6d54as_bovu1.sql`. "
              "Un documento per pagina/categoria prodotto.\n\n---\n\n")
     for d in docs:
-        fh.write(f"# {d['title']}\n\n> {d['kind']} · `{d['url']}` · agg. {d['updated']}\n\n{d['body']}\n\n---\n\n")
+        st = "" if d.get('status') == 'publish' else f" · **{d.get('status')}**"
+        fh.write(f"# {d['title']}\n\n> {d['kind']} · `{d['url']}` · agg. {d['updated']}{st}"
+                 f"\n\n{d['body']}\n\n---\n\n")
 
 def chunks(d):
     """split a doc into section-level chunks on markdown headings"""
@@ -344,36 +405,44 @@ def chunks(d):
 with open(f"{OUT}/knowledgebase.jsonl", 'w') as fh:
     for d in docs:
         for i, (h, t) in enumerate(chunks(d)):
-            fh.write(json.dumps({'id': f"{d['slug']}#{i}", 'doc': d['slug'], 'kind': d['kind'],
-                                 'url': d['url'], 'page_title': d['title'], 'section': h,
-                                 'text': t, 'updated': d['updated']}, ensure_ascii=False) + "\n")
+            rec = {'id': f"{d['slug']}#{i}", 'doc': d['slug'], 'kind': d['kind'],
+                   'url': d['url'], 'page_title': d['title'], 'section': h,
+                   'text': t, 'updated': d['updated'], 'status': d.get('status', 'publish')}
+            if d.get('categories'): rec['categories'] = d['categories']
+            if d.get('tags'):       rec['tags'] = d['tags']
+            fh.write(json.dumps(rec, ensure_ascii=False) + "\n")
 
 print(f"pagine {len(pages)} · prodotti {len(prods)} · blog {len(blog)} · media {len(media)}")
 print(f"chunk jsonl: {sum(len(chunks(d)) for d in docs)}")
 
 # ---------------------------------------------------------------- INDEX
 idx = ["# Knowledgebase 13 Protein", "",
-       "Generato da `tools/build_kb.py` a partire da `proteitobu6d54as_cjgw1.csv`.",
-       "**Non modificare a mano**: ogni rigenerazione sovrascrive.", "",
+       "Generato da `tools/build_kb.py` a partire da `proteitobu6d54as_bovu1.sql`",
+       f"(dump completo del DB di `{options.get('siteurl','')}`).",
+       "**Non modificare a mano**: ogni rigenerazione svuota e riscrive queste cartelle.", "",
        "Escluso di proposito: revisioni, config plugin, log Wordfence, utenti WP,",
-       "submission dei form (dati personali).", "",
+       "submission dei form (dati personali), copie superate della home (`home-old*`, `home-500`).", "",
        "## Pagine", ""]
 for d in docs:
     if d['kind'] == 'page':
-        idx.append(f"- [{d['title']}](pages/{d['slug']}.md) — `{d['url'].replace(SITE,'')}` · {len(d['body'])} B")
+        st = "" if d['status'] == 'publish' else f" · **{d['status']}**"
+        idx.append(f"- [{d['title']}](pages/{d['slug']}.md) — `{d['url'].replace(SITE,'')}`{st} · {len(d['body'])} B")
 idx += ["", "## Categorie prodotto", ""]
 for d in docs:
     if d['kind'] == 'product_category':
         idx.append(f"- [{d['title']}](products/{d['slug']}.md) — "
-                   f"{len(d.get('categories',[]))} formulazioni, {len(d.get('formats',[]))} formati")
+                   f"{len(d.get('formulations',[]))} formulazioni, {len(d.get('formats',[]))} formati")
+blog_cats = sorted({c for d in docs if d['kind'] == 'post' for c in d.get('categories', [])})
 idx += ["", "## Articoli blog", "",
         f"- {len([d for d in docs if d['kind']=='post'])} post, tutti copie dello stesso placeholder "
-        "\"Our culture, our values\" — nessun contenuto reale.", "",
+        "\"Our culture, our values\" — nessun contenuto reale.",
+        f"- Sono però categorizzati: {', '.join(blog_cats)}. Le categorie dicono quali temi "
+        "editoriali sono previsti, non cosa il sito sa dire su di essi.", "",
         "## Sito", "",
-        "- [site/site-meta.md](site/site-meta.md) — stack, plugin, inventario",
+        "- [site/site-meta.md](site/site-meta.md) — stack, plugin, lingue WPML, tassonomie, inventario",
         "- [site/navigation.md](site/navigation.md) — header e footer",
         "- [site/forms.md](site/forms.md) — campi dei form (senza submission)",
-        "- [site/media.csv](site/media.csv) — 336 allegati", "",
+        f"- [site/media.csv](site/media.csv) — {len(media)} allegati", "",
         "## Bundle", "",
         "- [knowledgebase.md](knowledgebase.md) — tutto in un file",
         f"- [knowledgebase.jsonl](knowledgebase.jsonl) — {sum(len(chunks(d)) for d in docs)} chunk "

@@ -5,6 +5,8 @@ url: "/info-nutrizionali-vitamin-c-effervescent-stick"
 type: "page"
 post_id: "4243"
 updated: "2026-04-27"
+status: "publish"
+lang: "en"
 ---
 # Info Nutrizionali Vitamin C Effervescent Stick
 

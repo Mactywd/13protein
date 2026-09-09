@@ -7,15 +7,15 @@ type: "site"
 
 ## Header (`/elementor-header-20`)
 
-![](2025/09/White-logo.svg)
+![](2025/10/logo-white.png)
 
-![](2025/09/full-color-logo.svg)
+![](2025/10/logo-color-scaled.png)
 
-[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Insights
+[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality
 
-[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Insights | Contact Us | EN
+[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Contact Us | EN
 
-[CTA] Contact Us -> https://13protein.tobugroup.com/contact-us/
+[CTA] Contact Us -> https://ai.13protein.tobugroup.com/contact-us/
 
 - EN
 
@@ -23,22 +23,24 @@ type: "site"
 
 ### Stay in the Loop
 
-Get the latest news, product updates and insights from 13 Protein
+Get the latest news, product updates and insights from 13 Protein.
 
-[FORM] Newsletter — campi: E-mail address, E-mail *
+[FORM] Newsletter — campi: Enter your email address, E-mail *, honeypot
 
 ![](2025/10/Anim-13-Protein-Logo-Figma-1.gif)
 
-![](2025/10/logo-white.svg)
+![](2025/10/logo-white.png)
 
 ##### Manufacturing excellence for supplement brands.
 
 ### Navigation
 
-| Group
-| Services & Manufacturing
-| Products News
-| Contact us
+| [About Us](https://ai.13protein.tobugroup.com/about-us/)
+| [Our Team](https://ai.13protein.tobugroup.com/our-team/)
+| [Services & Manufacturing](https://ai.13protein.tobugroup.com/services-manufacturing/)
+| [Products](https://ai.13protein.tobugroup.com/products/)
+| [Quality](https://ai.13protein.tobugroup.com/quality/)
+| [Contact us](https://ai.13protein.tobugroup.com/contact-us/)
 **Download our PDF catalogs**
 
 ### Terms and Conditions
@@ -47,15 +49,15 @@ Get the latest news, product updates and insights from 13 Protein
 
 ### Certificates
 
-| [Certificate SKRUV](https://13protein.tobugroup.com/wp-content/uploads/2026/08/FSSC_22000_Food-ENG-C788833-2-20260702_SKRUV.pdf)
-| [Certificate Stockholm](https://13protein.tobugroup.com/wp-content/uploads/2026/08/FSSC_22000_Food-ENG-C783534-2-20260729-_SKOGAS.pdf)
+| [Certificate SKRUV](https://ai.13protein.tobugroup.com/wp-content/uploads/2026/08/FSSC_22000_Food-ENG-C788833-2-20260702_SKRUV.pdf)
+| [Certificate Stockholm](https://ai.13protein.tobugroup.com/wp-content/uploads/2026/08/FSSC_22000_Food-ENG-C783534-2-20260729-_SKOGAS.pdf)
 
 ### Contact Us
 
 - info@13protein.com
 - Speditionsvägen 45, 142 50 Skogås Stockholm Sweden
 
-[SOCIAL] facebook-icon-white.svg https://www.facebook.com/profile.php?id=100083050164858 | instagram-icon-white.svg https://www.instagram.com/13proteinimport/ | youtube-icon-white.svg https://www.instagram.com/13proteinimport/ | linkedin-icon-white.svg https://www.linkedin.com/company/13-e-protein-import-ab
+[SOCIAL] facebook-icon-white.svg https://www.facebook.com/profile.php?id=100083050164858 | instagram-icon-white.svg https://www.instagram.com/13proteinimport/ | youtube-icon-white.svg | linkedin-icon-white.svg https://www.linkedin.com/company/13-e-protein-import-ab
 
 ###### Review us on
 
@@ -161,14 +163,14 @@ Privacy Policy | Cookies | Preferences | Collection
 
 ## Header white (`/header-white`)
 
-![](2025/09/full-color-logo.svg)
+![](2025/10/logo-color-scaled.png)
 
-![](2025/09/White-logo.svg)
+![](2025/10/logo-white.png)
 
-[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Insights
+[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality
 
-[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Insights | Contact Us | EN
+[MENU Menu] About us | Our Team | Services & Manufacturing | Products | Quality | Contact Us | EN
 
-[CTA] Contact Us -> https://13protein.tobugroup.com/contact-us/
+[CTA] Contact Us -> https://ai.13protein.tobugroup.com/contact-us/
 
 - EN

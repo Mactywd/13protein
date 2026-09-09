@@ -4,7 +4,9 @@ slug: "about-us"
 url: "/about-us"
 type: "page"
 post_id: "4313"
-updated: "2026-08-21"
+updated: "2026-09-09"
+status: "publish"
+lang: "en"
 ---
 # About Us
 
@@ -12,37 +14,35 @@ updated: "2026-08-21"
 
 # About us.
 
-### We manufacture supplement brands, not just products.Since 1997, we’ve helped brands turn ideas into market-ready supplements.
+### We manufacture supplement brands, not just products. Since 1997, we’ve helped brands turn ideas into market-ready supplements.
 
 #### MANUFACTURING
 
 #### PLANTS
-
-**55000**
-
-sQM Production
-space
-
-**4000+**
-
-products
-developed per year
-
-**400+**
-
-B2B
-Customers
 
 **5**
 
 Manufacturing
 Plants
 
+**55K**
+
+sQM of Production
+space
+
+**4K+**
+
+products
+developed annually
+
+**400+**
+
+B2B
+Customers
+
 ### Everything you need to build and scale
 
-13 Protein is a European supplement development and manufacturing group supporting brands across performance, wellness and functional nutrition
-
-Our integrated capabilities bring formulation, production, packaging and regulatory expertise together within one manufacturing network - giving brands greater control, flexibility and consistency from development to production
+From formulation and production to packaging, quality and delivery, our integrated capabilities support your product from development to market.
 
 #### One partner. One process. Full control.
 
@@ -58,33 +58,29 @@ From development to delivery, our integrated capabilities bring every key stage 
 
 ### Product Development & R&D
 
-Formulation and product development
+Formulation and product development for different product requirements.
 
 ### Manufacturing
 
-Flexible production across multiple formats
+Flexible production across multiple formats.
 
 ### Packaging
 
-Packaging solutions for different product needs
+Packaging solutions across different formats and product needs.
 
 ### Quality Control
 
-Quality built into every stage of production.
+Quality controls throughout the production process.
 
-### Regulatory & compliance
+### Logistics & Delivery
 
-Support across documentation and regulatory requirements
-
-### Logistics & delivery
-
-Coordinated delivery from production to market
+Coordinated logistics from production to final delivery.
 
 ### Built for brands at every stage
 
 From startups to established companies, we support supplement brands through every phase of growth.
 
-### One group. Complementary expertise
+### One group. Complementary expertise.
 
 13 Protein Group brings together specialized companies and production capabilities across supplement manufacturing, functional foods and beverages.
 Together, they create an integrated network designed to support brands across different product formats, production needs and stages of growth.
@@ -125,20 +121,27 @@ Today, 13 Protein combines decades of industry experience with an integrated man
 
 ![](2026/07/1997.png)
 
-Foundation & Compliance
-13 Protein Import AB is established, building a production-focused company with strong foundations in formulation, regulatory compliance, and solid-format manufacturing.
+Foundation & Compliance Base
+13 Protein Import AB established
+Built a production-focused company for supplements and functional foods, with an early focus on formulation standards, regulatory compliance and solid-format manufacturing.
 
 ![](2026/07/2018.png)
 
 Format Expansion
-Entry into ready-to-drink production, expanding capabilities into scalable beverage manufacturing for supplement brands.
+Entry into ready-to-drink production
+Expanded into RTD formats, enabling scalable beverage manufacturing for supplement brands.
 
 ![](2026/07/2021.png)
 
-Portfolio Diversification
-Entry into ready-to-drink production, expanding capabilities into scalable beverage manufacturing for supplement brands.
+Innovative Formats & Liquids
+Nordisk Hälsokost acquisition
+Strengthened our capabilities across powders, liquids and functional shots, supporting more diversified product portfolios.
 
 ![](2026/07/2023.png)
+
+Functional Foods & Niche Markets
+Mixwell AB acquisition
+Entered gluten-free baking mixes and functional foods, expanding into specialized and niche segments.
 
 Scalable Beverage Infrastructure
 Expansion of the Skruv facility, tripling ready-to-drink capacity for cans and PET bottles.
@@ -176,34 +179,34 @@ What drives us
 
 ### 05 Partnership
 
-### We keep moving forward
+### We keep moving forward.
 
 We continuously explore new ingredients, formats, technologies and processes to help brands respond to evolving market needs.
 
-### We build quality into every step
+### We build quality into every step.
 
 From raw material selection to finished production, quality is integrated throughout our development and manufacturing processes.
 
-### We believe in clear collaboration
+### We believe in clear collaboration.
 
 Open communication and visibility throughout the process help our customers make better decisions and build stronger products.
 
 We continuously look for ways to improve how we source, produce, package and operate across our manufacturing network.
 
-### We work towards smarter production
+### We work towards smarter production.
 
 We work alongside our customers as long-term manufacturing partners, adapting our capabilities as their products, portfolios and markets evolve.
 
-### We grow together
+### We grow together.
 
 ### The people behind the system
 
 ### Different expertise. One shared goal: helping brands bring better products to market.
 
-[CTA] Meet our team -> https://13protein.tobugroup.com/our-team/
+[CTA] Meet our team -> https://ai.13protein.tobugroup.com/our-team/
 
 ### Build faster. Scale smarter.
 
 ### With a manufacturing partner designed for growth.
 
-[CTA] Get A Quote
+[CTA] Get a quote -> https://ai.13protein.tobugroup.com/contact-us/

@@ -3,8 +3,10 @@ title: "home"
 slug: "home"
 url: "/home"
 type: "page"
-post_id: "3224"
-updated: "2026-08-21"
+post_id: "8892"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # home
 
@@ -96,15 +98,15 @@ Convenient single-serving formats designed for on-the-go consumption.
 
 ![](2026/03/sleek-silver-bar-wrapper-mockup-dark-background-1.png)
 
-### Beauty & skincare
+### Beauty & Skincare
 
-### Solutions designed for wellness brands.
+Solutions designed for beauty and wellness brands.
 
 From concept to production, we support brands entering the beauty space with consistency and quality.
 
-[CTA] Explore beauty production -> https://13protein.tobugroup.com/products/
+[CTA] Explore beauty production -> https://ai.13protein.tobugroup.com/products/
 
-![](2026/07/monochrome-beauty-product-skincare-1.png)
+![](2026/07/monochrome-beauty-product-skincare-2-1.png)
 
 From formulation to finished product, we manage the details that bring your product to life.
 
@@ -112,7 +114,7 @@ From formulation to finished product, we manage the details that bring your prod
 
 ### YOUR PRODUCT, EVERY STEP OF THE WAY.
 
-[CTA] Discover more -> https://13protein.tobugroup.com/services-manufacturing/
+[CTA] Discover more -> https://ai.13protein.tobugroup.com/services-manufacturing/
 
 ![](2026/07/fotos-cerchio-nero.png)
 
@@ -128,7 +130,7 @@ From formulation to finished product, we manage the details that bring your prod
 
 Custom formulations developed around your specific product requirements.
 
-[CTA] Start your project -> https://13protein.tobugroup.com/contact-us/
+[CTA] Start your project -> https://ai.13protein.tobugroup.com/contact-us/
 
 ![](2026/07/gif_home.gif)
 
@@ -136,7 +138,7 @@ Custom formulations developed around your specific product requirements.
 
 Ready-to-launch formulations for brands looking for a faster route to market.
 
-[CTA] Launch faster -> https://13protein.tobugroup.com/contact-us/
+[CTA] Launch faster -> https://ai.13protein.tobugroup.com/contact-us/
 
 ![](2026/08/isolate-protein-home-2-e1785856561228.png)
 
@@ -148,7 +150,7 @@ Ready-to-launch formulas branded and packaged for fast market entry.
 
 Every stage is managed by our team, ensuring control, consistency and an efficient path to market.
 
-[CTA] Explore more... -> https://13protein.tobugroup.com/services-manufacturing/
+[CTA] Explore more... -> https://ai.13protein.tobugroup.com/services-manufacturing/
 
 ![](2026/04/13-protein-62.png)
 
@@ -186,9 +188,7 @@ Logistics and final delivery
 
 With 800+ raw materials in stock, our formulation expertise allows us to create solutions tailored to different product concepts, formats and requirements.
 
-[CTA] Explore ingredients & formulation -> https://13protein.tobugroup.com/services-manufacturing/
-
-![](2026/04/scoop-whey-protein-sport-nutrition-1.png)
+[CTA] Explore ingredients & formulation -> https://ai.13protein.tobugroup.com/services-manufacturing/
 
 ### Quality & Testing
 
@@ -196,10 +196,8 @@ With 800+ raw materials in stock, our formulation expertise allows us to create 
 
 Our testing procedures and quality standards help ensure consistency and compliance across our production.
 
-[CTA] Inside our Lab -> https://13protein.tobugroup.com/quality/
-
-![](2026/04/close-up-hand-holding-pipette-low-light-1.png)
+[CTA] Inside our lab -> https://ai.13protein.tobugroup.com/quality/
 
 ### Your next product starts here
 
-[CTA] REQUEST A QUOTE -> https://13protein.tobugroup.com/contact-us/
+[CTA] Request a quote -> https://ai.13protein.tobugroup.com/contact-us/

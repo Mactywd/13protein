@@ -4,7 +4,9 @@ slug: "products"
 url: "/products"
 type: "page"
 post_id: "6029"
-updated: "2026-08-21"
+updated: "2026-09-01"
+status: "publish"
+lang: "en"
 ---
 # Products
 
@@ -14,7 +16,7 @@ updated: "2026-08-21"
 
 ### Explore our product capabilities.
 
-### Our products
+### Our product capabilities
 
 From powders to ready-to-drink solutions, we develop and manufacture a wide range of formats across performance, wellness and functional nutrition.
 
@@ -22,26 +24,28 @@ From powders to ready-to-drink solutions, we develop and manufacture a wide rang
 
 ### Beauty & Skincare
 
-Explore our capabilities across skincare, cosmetics and topical product formats.
+Solutions designed for beauty and wellness brands.
 
-[CTA] Explore beauty production
+From concept to production, we support brands entering the beauty space with consistency and quality.
+
+[CTA] Explore beauty production -> https://ai.13protein.tobugroup.com/products/
 
 ![](2026/07/monochrome-beauty-product-skincare-2-1.png)
 
 ### Start from the formula
 
-Every product begins with the right formulation. From ingredient selection to functional design, our team develops formulations around specific product requirements and formats
+Every product begins with the right formulation. From ingredient selection to functional design, our team develops formulations around specific product requirements and formats.
 
-[CTA] Explore formulation & development
+[CTA] Explore formulation & development -> https://ai.13protein.tobugroup.com/services-manufacturing/
 
 ### Inside Our Lab
 
 Where formulation, testing and product development come together.
 
-[CTA] Explore quality & testing
+[CTA] Explore quality & testing -> https://ai.13protein.tobugroup.com/quality/
 
 ### Ready to develop
 
 #### your product?
 
-[CTA] Start your project
+[CTA] Start your project -> https://ai.13protein.tobugroup.com/contact-us/

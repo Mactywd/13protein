@@ -4,7 +4,9 @@ slug: "quality"
 url: "/quality"
 type: "page"
 post_id: "6157"
-updated: "2026-08-21"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # Quality
 
@@ -18,7 +20,7 @@ updated: "2026-08-21"
 
 From raw materials to final packaging, quality controls are integrated throughout the production process to support safety, consistency and compliance with applicable EU requirements.
 
-[CTA] Explore our process -> https://13protein.tobugroup.com/services-manufacturing/
+[CTA] Explore our process -> https://ai.13protein.tobugroup.com/services-manufacturing/
 
 ### Inside our quality control process
 
@@ -52,4 +54,6 @@ Every ingredient and production step is tracked and documented.
 
 [CTA] Download certifications -> /wp-content/uploads/2026/08/Certifications.zip
 
-[CTA] Contact us -> https://13protein.tobugroup.com/contact-us/
+#### Ready to start your project?
+
+[CTA] Contact us -> https://ai.13protein.tobugroup.com/contact-us/

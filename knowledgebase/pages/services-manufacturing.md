@@ -4,7 +4,9 @@ slug: "services-manufacturing"
 url: "/services-manufacturing"
 type: "page"
 post_id: "5292"
-updated: "2026-08-21"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # Services & Manufacturing
 
@@ -14,37 +16,36 @@ updated: "2026-08-21"
 
 ### Everything you need to build and scale your supplement product
 
-**One partner. One process. Full control.**
-From formulation to delivery, we manage every stage of the process - helping you launch faster, reduce complexity and scale with confidence.
+From formulation to delivery, we manage every stage of the process, helping you bring your product to market with greater efficiency and control.
 
-[CTA] Request a Quote -> https://13protein.tobugroup.com/contact-us/
+[CTA] Request a quote -> https://ai.13protein.tobugroup.com/contact-us/
 
 ### Private label
 
 Custom formulations developed around your specific product requirements and market needs.
 
-[CTA] Explore More -> https://13protein.tobugroup.com/services-manufacturing/private-label/
+[CTA] Explore more -> https://ai.13protein.tobugroup.com/services-manufacturing/private-label/
 
 ### White label
 
 Go to market faster with ready-to-launch products.
 
-[CTA] Explore More -> https://13protein.tobugroup.com/services-manufacturing/white-label/
+[CTA] Explore more -> https://ai.13protein.tobugroup.com/services-manufacturing/white-label/
 
 ### Rebranding
 
 The fastest way to launch your product: ready-made formulas, pre-designed labels and your logo, ready to ship in 48-72 hours.
 
-[CTA] Explore More -> https://13protein.tobugroup.com/services-manufacturing/rebranding/
+[CTA] Explore more -> https://ai.13protein.tobugroup.com/services-manufacturing/rebranding/
 
 ### A structured process behind every product
 
-From concept to delivery, we manage every stage - ensuring consistency, compliance, and scalability.
+From concept to delivery, we manage every stage of the process to support consistency, compliance and scalability.
 
 ### Formulation & R&D
 
-We turn your product idea into a defined formulation.
-**Custom formulations are developed around your product requirements, category and intended use.**
+**We turn your product idea into a defined formulation.**
+Formulations are developed around your product requirements, category and intended use.
 
 ### Ingredient Sourcing
 
@@ -53,7 +54,8 @@ Carefully selected ingredients across multiple categories, offering flexibility 
 
 ### Manufacturing
 
-Scalable production across certified facilities. From small batches to large volumes, aligned with your growth.
+Scalable production across certified facilities.
+From smaller batches to large volumes, with production capacity to support different stages of growth.
 
 ### Quality Control
 
@@ -62,8 +64,8 @@ Raw materials, production stages and finished products are monitored according t
 
 ### Packaging & Labelling
 
-**Your product is packed in the selected format and prepared for final presentation.**
-Labels are applied according to the artwork and specifications provided by your brand.
+Your product is prepared for its final presentation.
+Your product is packed in the selected format and labels are applied according to the artwork and specifications provided by your brand.
 
 ### Logistics & Delivery
 
@@ -72,30 +74,22 @@ Completed orders are prepared for shipment and delivered to the agreed destinati
 
 ### Packaging & Branding
 
-### Why choose us
+### Why choose us? Or Why work with us?
 
-### Structured system
+### Structured manufacturing system
 
-Full control from formulation to delivery
+Integrated capabilities supporting the product journey from development to delivery.
 
-### Scalable production
+### Multi-site production capacity
 
-Grow without changing partner
+Access to complementary production capabilities across different formats and facilities.
 
-### Speed to market
+### Quality & compliance
 
-Faster development and launch cycles
+Quality controls and production processes aligned with applicable requirements.
 
-### Compliance standards
+### Scalable production model
 
-Products developed to meet applicable requirements
+Production capabilities designed to support different volumes and stages of growth.
 
-### Build faster.
-
-### Scale smarter.
-
-#### With a manufacturing
-
-#### partner designed for growth.
-
-[CTA] Contact us -> https://13protein.tobugroup.com/contact-us/
+#### Ready to start your project?

@@ -5,6 +5,10 @@ url: "/our-culture-our-values"
 type: "post"
 post_id: "6299"
 updated: "2026-07-29"
+status: "publish"
+lang: "en"
+categories: ["Manufacturing & compliance"]
+tags: ["evidenza"]
 ---
 # Our culture, our values
 

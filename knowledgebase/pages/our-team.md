@@ -4,7 +4,9 @@ slug: "our-team"
 url: "/our-team"
 type: "page"
 post_id: "4638"
-updated: "2026-08-21"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # Our Team
 
@@ -25,6 +27,10 @@ Our team brings together complementary skills and experience to support each pro
 ### Andrea Falciani
 
 ### CEO / Founder (Italy)
+
+![](2026/09/Group-1.png)
+
+### Fabrizio Lancia
 
 ![](2026/07/13Protein-10-5.png)
 
@@ -92,4 +98,4 @@ Different perspectives come together through shared responsibility, clear proces
 
 #### your next product?
 
-[CTA] Talk to our team
+[CTA] Talk to our team -> https://ai.13protein.tobugroup.com/contact-us/

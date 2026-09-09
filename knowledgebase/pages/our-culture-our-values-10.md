@@ -5,6 +5,10 @@ url: "/our-culture-our-values-10"
 type: "post"
 post_id: "6322"
 updated: "2026-07-29"
+status: "publish"
+lang: "en"
+categories: ["Product & formulation insights"]
+tags: ["Brand building tips"]
 ---
 # Our culture, our values
 

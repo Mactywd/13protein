@@ -4,7 +4,9 @@ slug: "private-label"
 url: "/private-label"
 type: "page"
 post_id: "5421"
-updated: "2026-08-21"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # Private Label
 
@@ -14,15 +16,13 @@ updated: "2026-08-21"
 
 ### Build a supplement product designed around your brand
 
-**A fully customized development process**
-from formulation to packaging - aligned with your positioning, market, and growth strategy.
+A fully customized development process, from formulation to packaging, aligned with your brand, market and product requirements.
 
-[CTA] Get a Quote -> https://13protein.tobugroup.com/contact-us/
+[CTA] Request a quote -> https://ai.13protein.tobugroup.com/contact-us/
 
-Full control over your product,
-**from concept to final result**
+**Your product, developed around your brand**
 
-Private label gives you the flexibility to create a product that reflects your brand - supported by a structured manufacturing system that ensures
+Private label gives you the flexibility to create a product that reflects your brand, supported by a structured manufacturing process designed for consistency, compliance and scalability.
 
 - Consistency
 
@@ -38,11 +38,13 @@ A simplified process
 
 **Formula** — development
 
-**Validation &** — compliance
+**Testing &** — Compliance
 
 **Manufacturing**
 
 ### Packaging
+
+### Designed for
 
 A structured development process
 
@@ -56,23 +58,23 @@ A structured development process
 
 Designed for:
 
-### Brands
+### Unique products
 
-building a unique product
+For brands looking to develop a product tailored to their positioning.
 
-### Companies
+### New categories
 
-entering new categories
+For companies expanding into new product categories.
 
-### Businesses
+### Portfolio growth
 
-scaling their portfolio
+For businesses looking to scale and diversify their product range.
 
 ### Why work with us?
 
 - Structured manufacturing system
 - Multi-site production capacity
-- Regulatory expertise
+- Quality & Compliance
 - Scalable production model
 
 ![](2026/07/fotos-cerchio-nero.png)
@@ -85,4 +87,4 @@ scaling their portfolio
 
 #### together
 
-[CTA] Get A Quote -> https://13protein.tobugroup.com/contact-us/
+[CTA] Get A Quote -> https://ai.13protein.tobugroup.com/contact-us/

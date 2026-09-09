@@ -1,5 +1,7 @@
-# Sorgente WordPress (767 MB, contiene dati personali)
-*.csv
+# Dump sorgente (~1 GB, contiene dati personali) — anchored alla root, così
+# knowledgebase/site/media.csv resta versionato
+/*.sql
+/*.csv
 # Intermedio rigenerabile
 .cache/
 __pycache__/

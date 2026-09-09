@@ -5,7 +5,7 @@ type: "site"
 
 # Form del sito
 
-_Solo la definizione dei campi. Le 23 submission con dati personali sono escluse dal knowledgebase._
+_Solo la definizione dei campi. Le submission (nome/email/telefono/IP) restano nelle tabelle `e_submissions*` del dump e non entrano mai nel knowledgebase._
 
 ## modulo contatto  (su `/contact-us`)
 

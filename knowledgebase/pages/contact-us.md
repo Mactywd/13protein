@@ -4,13 +4,17 @@ slug: "contact-us"
 url: "/contact-us"
 type: "page"
 post_id: "6336"
-updated: "2026-08-21"
+updated: "2026-09-02"
+status: "publish"
+lang: "en"
 ---
 # Contact us
 
 [SOCIAL] facebook.svg https://www.facebook.com/profile.php?id=100083050164858 | instagram.svg https://www.instagram.com/13proteinimport/ | youtube.svg https://www.linkedin.com/company/13-e-protein-import-ab
 
 # Contact us.
+
+Whether you’re starting with an idea, launching a new brand or looking for a manufacturing partner, tell us about your project and our team will get back to you.
 
 [FORM] modulo contatto — campi: Nome, Write your name..., Write your name..., Full Name, Company name (Optional), E-mail address, Phone number (Optional), Website / social media (Optional), Nome, Write your name..., Which option best describes you?, What are you looking to create?, Preferred format (optional), Nome, Write your name..., Tell us about your product idea, target market, preferred ingredients, formats, or any specific requirements., honeypot, recaptcha_v3
 

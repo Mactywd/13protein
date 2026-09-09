@@ -4,7 +4,7 @@ slug: "health-wellness"
 url: "/health-wellness"
 type: "product_category"
 post_id: "6013"
-updated: "2026-08-20"
+updated: "2026-08-24"
 ---
 
 # Health & Wellness
@@ -29,7 +29,7 @@ We develop functional formulations across vitamins, minerals and targeted wellne
 - Jars
 - Stand up Pouches
 - Bottles
-- Blister
+- Blisters
 - Shots
 
 ## Claim di chiusura

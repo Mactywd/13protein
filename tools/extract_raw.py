@@ -1,71 +1,87 @@
 #!/usr/bin/env python3
-"""Stage 1 — pull the tables we care about out of the concatenated WP dump.
+"""Stage 1 — pull the tables we care about out of the full MySQL dump.
 
-The source CSV is ~76 WordPress tables glued together, each preceded by its own
-header row. We locate them by header signature (not by byte offset) and keep
-only wp_posts / wp_postmeta / wp_options. Everything else — revisions, Wordfence
-logs, form submissions, users — is dropped here and never reaches the KB.
+The source is a phpMyAdmin dump of the whole WordPress database (~76 tables).
+We whitelist the handful that carry content: posts / postmeta / options, plus
+the taxonomy tables (the blog now has real categories) and the WPML language
+tables. Everything else — form submissions, users, Wordfence logs, translation
+job queues — is dropped here and never reaches the KB.
 
-Writes .cache/raw.json (~1.5 MB) so stage 2 never re-reads the 767 MB file.
+Writes .cache/raw.json so stage 2 never re-reads the 1 GB file (~25 s).
 """
-import csv, re, sys, json, os, collections
+import re, sys, json, os, collections
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import sqldump
 
 ROOT  = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-CSV   = os.path.join(ROOT, "proteitobu6d54as_cjgw1.csv")
+SQL   = os.path.join(ROOT, "proteitobu6d54as_bovu1.sql")
 CACHE = os.path.join(ROOT, ".cache")
-csv.field_size_limit(sys.maxsize)
 
-HEADERS = {
-    ('option_id', 'option_name', 'option_value', 'autoload'): 'options',
-    ('meta_id', 'post_id', 'meta_key', 'meta_value'): 'postmeta',
-    ('ID', 'post_author', 'post_date', 'post_date_gmt', 'post_content', 'post_title'): 'posts',
-}
-IDENT = re.compile(r'^[A-Za-z_][A-Za-z0-9_]*$')
-def is_header(row):
-    """A row whose every field is a bare identifier starts a new table."""
-    return len(row) >= 2 and all(IDENT.match(f or '') for f in row)
+PFX = 'uytw_'          # this export's table prefix; a new export may differ
+T = lambda n: PFX + n
+WANTED = {T(n) for n in ('posts', 'postmeta', 'options', 'terms', 'term_taxonomy',
+                         'term_relationships', 'icl_languages', 'icl_translations')}
 
-POST_COLS = ['ID','post_author','post_date','post_date_gmt','post_content','post_title','post_excerpt',
-             'post_status','comment_status','ping_status','post_password','post_name','to_ping','pinged',
-             'post_modified','post_modified_gmt','post_content_filtered','post_parent','guid','menu_order',
-             'post_type','post_mime_type','comment_count']
 # post types that carry no reusable knowledge
-SKIP_TYPES = {'revision','acf-field','acf-field-group','acf-post-type','customize_changeset',
-              'wp_global_styles','custom_css','oembed_cache','nav_menu_item'}
+SKIP_TYPES = {'revision', 'acf-field', 'acf-field-group', 'acf-post-type', 'customize_changeset',
+              'wp_global_styles', 'custom_css', 'oembed_cache', 'nav_menu_item', 'wp_navigation'}
+
+# options are a dumping ground for plugin state; keep only what stage 2 reads
+OPT_KEEP = {'blogname', 'blogdescription', 'siteurl', 'home', 'WPLANG', 'template',
+            'stylesheet', 'page_on_front', 'show_on_front', 'permalink_structure',
+            'active_plugins', 'category_base', 'posts_per_page', 'timezone_string'}
+OPT_PREFIX = ('elementor_', 'options_', 'acf_')     # theme/global settings and ACF option pages
+OPT_DROP = re.compile(r'^(_?_?site_)?_?transient|^wordfence|^wf|^limit_login|^itsec|_notice|_cache$')
+
 
 def main():
     posts, meta, options = {}, collections.defaultdict(dict), {}
-    mode, stats = None, collections.Counter()
+    terms, taxonomy, rels, languages, translations = {}, {}, [], [], []
+    stats = collections.Counter()
 
-    with open(CSV, newline='', encoding='utf-8', errors='replace') as f:
-        for row in csv.reader(f):
-            key = tuple(row[:6]) if len(row) >= 6 else tuple(row)
-            hit = HEADERS.get(tuple(row)) or HEADERS.get(key)
-            if hit:
-                mode = hit
+    for table, r in sqldump.iter_rows(SQL, WANTED):
+        name = table[len(PFX):]
+        stats[name] += 1
+        if name == 'posts':
+            if r['post_type'] in SKIP_TYPES:
+                stats['skipped_' + r['post_type']] += 1
                 continue
-            if is_header(row):        # some other table begins — stop collecting
-                mode = None
-                continue
-            if mode == 'options' and len(row) == 4:
-                options[row[1]] = row[2]
-            elif mode == 'postmeta' and len(row) == 4:
-                meta[row[1]][row[2]] = row[3]
-            elif mode == 'posts' and len(row) == len(POST_COLS):
-                p = dict(zip(POST_COLS, row))
-                if p['post_type'] in SKIP_TYPES:
-                    stats['skipped_' + p['post_type']] += 1
-                    continue
-                posts[p['ID']] = p
-            stats[mode or 'other'] += 1
+            posts[r['ID']] = r
+        elif name == 'postmeta':
+            meta[r['post_id']][r['meta_key']] = r['meta_value']
+        elif name == 'options':
+            k = r['option_name']
+            if k in OPT_KEEP or (k.startswith(OPT_PREFIX) and not OPT_DROP.match(k)):
+                options[k] = r['option_value']
+        elif name == 'terms':
+            terms[r['term_id']] = r
+        elif name == 'term_taxonomy':
+            taxonomy[r['term_taxonomy_id']] = r
+        elif name == 'term_relationships':
+            rels.append(r)
+        elif name == 'icl_languages':
+            if r['active'] == '1':
+                languages.append(r)
+        elif name == 'icl_translations':
+            translations.append(r)
 
     meta = {k: v for k, v in meta.items() if k in posts}   # drop meta of skipped posts
+    rels = [x for x in rels if x['object_id'] in posts]
+    translations = [t for t in translations
+                    if t['element_type'].startswith('post_') and t['element_id'] in posts]
+
     os.makedirs(CACHE, exist_ok=True)
-    json.dump({'posts': posts, 'meta': meta, 'options': options},
+    json.dump({'posts': posts, 'meta': meta, 'options': options, 'terms': terms,
+               'taxonomy': taxonomy, 'rels': rels, 'languages': languages,
+               'translations': translations},
               open(os.path.join(CACHE, 'raw.json'), 'w'))
-    print(f"posts kept {len(posts)} · meta {len(meta)} · options {len(options)}")
+
+    print(f"posts kept {len(posts)} · meta {len(meta)} · options {len(options)} · "
+          f"terms {len(terms)} · lingue attive {len(languages)}")
     for k, v in stats.most_common():
         print(f"  {k:<32} {v}")
+
 
 if __name__ == '__main__':
     main()

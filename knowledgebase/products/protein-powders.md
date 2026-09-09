@@ -4,7 +4,7 @@ slug: "protein-powders"
 url: "/protein-powders"
 type: "product_category"
 post_id: "5874"
-updated: "2026-08-20"
+updated: "2026-09-02"
 ---
 
 # Protein Powders
@@ -25,7 +25,7 @@ From whey and casein to plant-based and alternative protein sources, we develop 
 
 - Powders
 - Jars
-- Stand-up pouches
+- Stand-up Pouches
 - Stick Packs
 - Buckets
 
@@ -35,6 +35,8 @@ From formulation to full-scale production
 
 ## Media
 
-- 2026/07/8d603e1c781e8ac867487113dcbca9cd31b2c25d.jpg
-- 2026/07/56a86ea2c021dfe407d0bb02e2d8acfdddf1347b.jpg
-- 2026/07/451a92041da204b8d7acf690444167ce51f63236.jpg
+- 2026/07/new_prova_01.jpg
+- 2026/07/new_prova_02.jpg
+- 2026/07/new_prova_03.jpg
+- 2026/07/new_prova_04.jpg
+- 2026/07/new_prova_05.jpg

@@ -5,6 +5,10 @@ url: "/our-culture-our-values-8"
 type: "post"
 post_id: "6316"
 updated: "2026-07-29"
+status: "publish"
+lang: "en"
+categories: ["Market & brand strategy"]
+tags: ["Top in the community"]
 ---
 # Our culture, our values
 

@@ -5,6 +5,9 @@ url: "/our-culture-our-values-3"
 type: "post"
 post_id: "6307"
 updated: "2026-07-29"
+status: "publish"
+lang: "en"
+categories: ["Product & formulation insights"]
 ---
 # Our culture, our values
 
