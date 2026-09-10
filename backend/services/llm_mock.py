@@ -81,8 +81,6 @@ def _text(slug: str | None, lang: str, user: str, system: str) -> str:
     if slug == "qa_answer":
         titles = ", ".join(_TITLE_RE.findall(user)) or "none"
         return text.replace("{titles}", titles)
-    if slug == "qa_intro":
-        return text.replace("{project_description}", _input_section(system))
     if slug == "confirm_lead":
         return text.replace("{lead_bullets}", _lead_bullets(system))
     return text

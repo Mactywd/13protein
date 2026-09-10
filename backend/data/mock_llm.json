@@ -1,33 +1,87 @@
 {
-  "introduction": {"text": {
-    "en": "Welcome to 13 Protein. I help brands and startups shape a supplement project and get it to the right people in our team.\n\nTo start: **which option best describes you?**",
-    "it": "Benvenuto in 13 Protein. La aiuto a definire un progetto di integratori e a indirizzarlo al team giusto.\n\nPer iniziare: **quale opzione la descrive meglio?**"}},
-  "ask_category": {"text": {
-    "en": "Good, thank you. Now tell me **what you are looking to create**: pick one of the product categories below.",
-    "it": "Perfetto, grazie. Ora mi dica **cosa vuole creare**: scelga una delle categorie qui sotto."}},
-  "ask_format": {"text": {
-    "en": "Good choice. As an example, in this category we typically work on powders, ready-to-drink formats and single servings.\n\n**Do you already have a preferred format?**",
-    "it": "Ottima scelta. A titolo di esempio, in questa categoria lavoriamo tipicamente su polveri, formati pronti da bere e monodose.\n\n**Ha già un formato preferito?**"}},
-  "ask_project": {"text": {
-    "en": "Now **tell me about your project**. Useful details:\n\n• Target market and customer\n• Preferred ingredients or claims\n• Expected volumes or pack size\n• Timeline\n\nA few lines are enough.",
-    "it": "Ora **mi racconti il progetto**. Dettagli utili:\n\n• Mercato e cliente target\n• Ingredienti o claim preferiti\n• Volumi o formato confezione\n• Tempistiche\n\nBastano poche righe."}},
-  "validate_project": {"json": {"enough": false, "question": "Which market and customer are you targeting, and do you have volumes in mind?"}},
-  "summarize_project": {"text": {
-    "en": "Example summary: a protein powder for the gym channel, with target market, pack size and flavours already outlined and a spring launch in mind.",
-    "it": "Riassunto di esempio: una proteina in polvere per il canale palestre, con mercato, formato e gusti già definiti e un lancio previsto in primavera."}},
-  "qa_intro": {"text": {
-    "en": "Thank you, here is what I understood:\n\n{project_description}\n\n**Any questions about 13 Protein?** Ask me anything about how we work, or request a quote when you are ready.",
-    "it": "Grazie, ecco cosa ho capito:\n\n{project_description}\n\n**Ha domande su 13 Protein?** Mi chieda pure come lavoriamo, oppure richieda un preventivo quando è pronto."}},
-  "qa_answer": {"text": {
-    "en": "Example answer based on the pages: {titles}. For prices, minimum quantities and lead times we prepare a quote.",
-    "it": "Risposta di esempio basata sulle pagine: {titles}. Per prezzi, quantità minime e tempi di consegna prepariamo un preventivo."}},
-  "ask_contact": {"text": {
-    "en": "To send you a quote I need three things in one message: **your name, your company and your e-mail**.",
-    "it": "Per inviarle un preventivo mi servono tre cose in un messaggio: **nome, azienda ed e-mail**."}},
-  "extract_contact": {"json": {"name": null, "company": null, "email": null, "valid": false}},
-  "confirm_lead": {"text": {
-    "en": "Here is the summary of your request:\n\n{lead_bullets}\n\n**Confirm** to send it to our team, or **Edit** to change the contact details.",
-    "it": "Ecco il riepilogo della richiesta:\n\n{lead_bullets}\n\n**Conferma** per inviarla al nostro team, oppure **Modifica** per cambiare i contatti."}},
-  "evaluation": {"json": {"outcome": "completed", "path_summary": "Lead di esempio: profilo, categoria e formato raccolti, una domanda sul knowledgebase, preventivo richiesto.", "problem": "", "quote_requested": true}},
-  "report_summary": {"json": {"friction_text": "Nessun attrito ricorrente nei dati di esempio.", "recommendations": ["Rivedere i prompt segnaposto prima del primo test con LLM reale.", "Verificare la copertura del knowledgebase sulle domande più frequenti."]}}
+  "introduction": {
+    "text": {
+      "en": "Welcome to 13 Protein. I help brands and startups shape a supplement project and get it to the right people in our team.\n\nTo start: **which option best describes you?**",
+      "it": "Benvenuto in 13 Protein. La aiuto a definire un progetto di integratori e a indirizzarlo al team giusto.\n\nPer iniziare: **quale opzione la descrive meglio?**"
+    }
+  },
+  "ask_category": {
+    "text": {
+      "en": "Good, thank you. Now tell me **what you are looking to create**: pick one of the product categories below.",
+      "it": "Perfetto, grazie. Ora mi dica **cosa vuole creare**: scelga una delle categorie qui sotto."
+    }
+  },
+  "ask_format": {
+    "text": {
+      "en": "Good choice. As an example, in this category we typically work on powders, ready-to-drink formats and single servings.\n\n**Do you already have a preferred format?**",
+      "it": "Ottima scelta. A titolo di esempio, in questa categoria lavoriamo tipicamente su polveri, formati pronti da bere e monodose.\n\n**Ha già un formato preferito?**"
+    }
+  },
+  "ask_project": {
+    "text": {
+      "en": "Now **tell me about your project**. Useful details:\n\n• Target market and customer\n• Preferred ingredients or claims\n• Expected volumes or pack size\n• Timeline\n\nA few lines are enough.",
+      "it": "Ora **mi racconti il progetto**. Dettagli utili:\n\n• Mercato e cliente target\n• Ingredienti o claim preferiti\n• Volumi o formato confezione\n• Tempistiche\n\nBastano poche righe."
+    }
+  },
+  "validate_project": {
+    "json": {
+      "enough": false,
+      "question": "Which market and customer are you targeting, and do you have volumes in mind?"
+    }
+  },
+  "summarize_project": {
+    "text": {
+      "en": "Example summary: a protein powder for the gym channel, with target market, pack size and flavours already outlined and a spring launch in mind.",
+      "it": "Riassunto di esempio: una proteina in polvere per il canale palestre, con mercato, formato e gusti già definiti e un lancio previsto in primavera."
+    }
+  },
+  "qa_intro": {
+    "text": {
+      "en": "**Any questions about 13 Protein?** Ask me anything about how we work, from formulation to packaging, or request a quote when you are ready.",
+      "it": "**Ha domande su 13 Protein?** Mi chieda pure come lavoriamo, dalla formulazione al packaging, oppure richieda un preventivo quando è pronto."
+    }
+  },
+  "qa_answer": {
+    "text": {
+      "en": "Example answer based on the pages: {titles}. For prices, minimum quantities and lead times we prepare a quote.",
+      "it": "Risposta di esempio basata sulle pagine: {titles}. Per prezzi, quantità minime e tempi di consegna prepariamo un preventivo."
+    }
+  },
+  "ask_contact": {
+    "text": {
+      "en": "To send you a quote I need three things in one message: **your name, your company and your e-mail**.",
+      "it": "Per inviarle un preventivo mi servono tre cose in un messaggio: **nome, azienda ed e-mail**."
+    }
+  },
+  "extract_contact": {
+    "json": {
+      "name": null,
+      "company": null,
+      "email": null,
+      "valid": false
+    }
+  },
+  "confirm_lead": {
+    "text": {
+      "en": "Here is the summary of your request:\n\n{lead_bullets}\n\n**Confirm** to send it to our team, or **Edit** to change the contact details.",
+      "it": "Ecco il riepilogo della richiesta:\n\n{lead_bullets}\n\n**Conferma** per inviarla al nostro team, oppure **Modifica** per cambiare i contatti."
+    }
+  },
+  "evaluation": {
+    "json": {
+      "outcome": "completed",
+      "path_summary": "Lead di esempio: profilo, categoria e formato raccolti, una domanda sul knowledgebase, preventivo richiesto.",
+      "problem": "",
+      "quote_requested": true
+    }
+  },
+  "report_summary": {
+    "json": {
+      "friction_text": "Nessun attrito ricorrente nei dati di esempio.",
+      "recommendations": [
+        "Rivedere i prompt segnaposto prima del primo test con LLM reale.",
+        "Verificare la copertura del knowledgebase sulle domande più frequenti."
+      ]
+    }
+  }
 }
