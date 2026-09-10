@@ -1,5 +1,8 @@
 # Analisi di `Mactywd/alchimista_ndc` come base per l'agente 13protein
 
+> Implementato come harness mock: vedi la spec del 2026-09-09 in
+> `docs/superpowers/specs/` e il piano in `docs/superpowers/plans/`.
+
 Data: 2026-09-09 · Commit analizzato: `12ffcac` (branch `master`) · Repo clonata in sola lettura, nessuna modifica.
 
 Scopo: capire come è fatto l'Alchimista (agente conversazionale di Note del Chianti che compone

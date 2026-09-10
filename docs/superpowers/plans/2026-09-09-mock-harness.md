@@ -30,7 +30,7 @@
 - Create: `backend/pyproject.toml`, `backend/.env.example`, `backend/.gitignore`, `backend/.dockerignore`, `backend/conftest.py`
 - Modify: `CLAUDE.md` (solo la sezione Struttura: aggiungere le nuove cartelle; la riscrittura completa è nel Task 16)
 
-- [ ] **Step 1: Copiare i file di tooling dalla sorgente**
+- [x] **Step 1: Copiare i file di tooling dalla sorgente**
 
 ```bash
 SRC=/home/user/alchimista_ndc; DST=/home/user/13protein
@@ -38,7 +38,7 @@ cp $SRC/package.json $SRC/package-lock.json $SRC/vite.config.js $SRC/eslint.conf
 cp $SRC/backend/pyproject.toml $SRC/backend/.dockerignore $SRC/backend/conftest.py $DST/backend/
 ```
 
-- [ ] **Step 2: Rinominare e adattare**
+- [x] **Step 2: Rinominare e adattare**
 
 - `package.json`: `"name": "agent13"`; scripts invariati (`dev`, `build`, `start`, `lint`, `test`, `preview`).
 - `backend/pyproject.toml`: `name = "agent13-backend"`, `requires-python = ">=3.11"`.
@@ -78,12 +78,12 @@ RETENTION_CONTENT_DAYS=730
 RETENTION_SESSION_DAYS=730
 ```
 
-- [ ] **Step 3: Installare le dipendenze e verificare**
+- [x] **Step 3: Installare le dipendenze e verificare**
 
 Run: `cd $DST && npm ci && cd backend && pip install -e ".[dev]"`
 Expected: entrambe senza errori; `python -c "import fastapi, asyncpg"` ok.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add package.json package-lock.json vite.config.js eslint.config.js index.html admin.html .gitignore .dockerignore .env.example backend/pyproject.toml backend/.env.example backend/.gitignore backend/.dockerignore backend/conftest.py
@@ -102,7 +102,7 @@ git commit -m "Bootstrap dell'harness: tooling Node e Python copiati dall'Alchim
 - Produces: `config.settings` con i nuovi campi `llm_provider: str = "mock"`, `retrieval_provider: str = "keyword"`, `kb_path: str = "../knowledgebase/knowledgebase.jsonl"`, `qdrant_collection: str = "kb13"`; `database_url` default `postgresql+asyncpg://agent13:changeme@localhost/agent13`.
 - Produces: `session.save(session_id, state, conn, is_testing=False)` che scrive le colonne `profile`, `category`, `format`, `quote_requested` (Task 2 definisce `SessionState`).
 
-- [ ] **Step 1: Copiare**
+- [x] **Step 1: Copiare**
 
 ```bash
 cp $SRC/backend/services/{__init__,db,usage,openrouter}.py $DST/backend/services/
@@ -110,7 +110,7 @@ cp $SRC/backend/{stream,session,transcripts,chats,config}.py $DST/backend/
 cp $SRC/backend/tests/{test_usage,test_openrouter_usage,test_openrouter_complete,test_stream,test_session,test_transcripts,test_chats,test_config}.py $DST/backend/tests/
 ```
 
-- [ ] **Step 2: Adattare `config.py`** (riscrivere in pieno)
+- [x] **Step 2: Adattare `config.py`** (riscrivere in pieno)
 
 ```python
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -144,17 +144,17 @@ class Settings(BaseSettings):
 settings = Settings()
 ```
 
-- [ ] **Step 3: Adattare `openrouter.py`**
+- [x] **Step 3: Adattare `openrouter.py`**
 
 - `"HTTP-Referer": "https://13protein.com"`.
 - `DEFAULT_MODEL = "google/gemma-4-26b-a4b-it:nitro"` resta (è un default, si cambia da chiamante).
 - Nessun altro cambio: il modulo è generico.
 
-- [ ] **Step 4: Adattare `stream.py`**
+- [x] **Step 4: Adattare `stream.py`**
 
 Sostituire `GeneralInfoEvent` → `LeadInfoEvent` e il nome evento `"general_info"` → `"lead_info"` (l'import da `models` arriva nel Task 2; fino ad allora il test di `stream` fallisce, è atteso).
 
-- [ ] **Step 5: Adattare `session.py`**
+- [x] **Step 5: Adattare `session.py`**
 
 In `save()`, sostituire le colonne di reporting:
 
@@ -177,28 +177,28 @@ In `save()`, sostituire le colonne di reporting:
     )
 ```
 
-- [ ] **Step 6: Adattare `chats.py`**
+- [x] **Step 6: Adattare `chats.py`**
 
 - In `chat_summary`: la condizione `inizializzata` diventa `abandoned and row.get("profile") is None`; i campi `path`/`fragrance_subpath` diventano `profile`/`category`/`format`.
 - In `sweep_abandoned`: `RETURNING id, profile` (il chiamante salta l'evaluation se `profile is None`).
 - In `list_chats` e `get_chat`: selezionare `s.profile, s.category, s.format, s.quote_requested` al posto di `s.path, s.fragrance_subpath`; nella `evaluation` di `get_chat` sostituire `essence_modified` con `quote_requested`.
 - `messages_from_row` invariato (carte e bottoni hanno la stessa forma).
 
-- [ ] **Step 7: Adattare `transcripts.py`**: invariato.
+- [x] **Step 7: Adattare `transcripts.py`**: invariato.
 
-- [ ] **Step 8: Adattare i test copiati**
+- [x] **Step 8: Adattare i test copiati**
 
 - `test_session.py`: le asserzioni su `path`/`fragrance_subpath`/`delegate_used` diventano `profile`/`category`/`format`/`quote_requested`.
 - `test_chats.py`: righe di fixture con `profile` invece di `path`; `inizializzata` quando `profile is None`.
 - `test_config.py`: aggiungere `assert settings.llm_provider == "mock"` e `settings.retrieval_provider == "keyword"`.
 - `test_stream.py`: `LeadInfoEvent` / `"event: lead_info"`.
 
-- [ ] **Step 9: Eseguire i test**
+- [x] **Step 9: Eseguire i test**
 
 Run: `cd $DST/backend && python -m pytest tests/test_usage.py tests/test_openrouter_usage.py tests/test_openrouter_complete.py tests/test_config.py -q`
 Expected: verdi. (`test_stream`, `test_session`, `test_chats`, `test_transcripts` dipendono da `models.py`: verdi dal Task 2.)
 
-- [ ] **Step 10: Commit**
+- [x] **Step 10: Commit**
 
 ```bash
 git add backend/services backend/stream.py backend/session.py backend/transcripts.py backend/chats.py backend/config.py backend/tests
@@ -216,7 +216,7 @@ git commit -m "Backend: servizi generici (db, usage, openrouter, stream, session
 **Interfaces:**
 - Produces: `Step`, `SessionState`, `to_lead_info()`, eventi `TextEvent | ButtonsEvent | CarouselEvent | ErrorEvent | LeadInfoEvent | DoneEvent | MessageBreakEvent`, `MESSAGE_BREAK`.
 
-- [ ] **Step 1: Scrivere il test**
+- [x] **Step 1: Scrivere il test**
 
 ```python
 # backend/tests/test_models.py
@@ -255,9 +255,9 @@ def test_state_roundtrip_json():
     assert SessionState.model_validate_json(s.model_dump_json()) == s
 ```
 
-- [ ] **Step 2: Eseguire il test** — Run: `python -m pytest tests/test_models.py -q` — Expected: FAIL (`ModuleNotFoundError: models`).
+- [x] **Step 2: Eseguire il test** — Run: `python -m pytest tests/test_models.py -q` — Expected: FAIL (`ModuleNotFoundError: models`).
 
-- [ ] **Step 3: Scrivere `backend/models.py`**
+- [x] **Step 3: Scrivere `backend/models.py`**
 
 ```python
 from __future__ import annotations
@@ -371,9 +371,9 @@ Event = (TextEvent | ButtonsEvent | CarouselEvent | ErrorEvent | LeadInfoEvent
          | DoneEvent | MessageBreakEvent)
 ```
 
-- [ ] **Step 4: Eseguire i test** — Run: `python -m pytest tests/test_models.py tests/test_stream.py tests/test_session.py tests/test_chats.py tests/test_transcripts.py -q` — Expected: verdi.
+- [x] **Step 4: Eseguire i test** — Run: `python -m pytest tests/test_models.py tests/test_stream.py tests/test_session.py tests/test_chats.py tests/test_transcripts.py -q` — Expected: verdi.
 
-- [ ] **Step 5: Commit** — `git add backend/models.py backend/tests/test_models.py && git commit -m "Backend: modelli dello stato lead e contratto eventi SSE"`
+- [x] **Step 5: Commit** — `git add backend/models.py backend/tests/test_models.py && git commit -m "Backend: modelli dello stato lead e contratto eventi SSE"`
 
 ---
 
@@ -387,7 +387,7 @@ Event = (TextEvent | ButtonsEvent | CarouselEvent | ErrorEvent | LeadInfoEvent
 **Interfaces:**
 - Produces: `prompts.load(slug, **placeholders) -> str`, il cui risultato inizia con `# Prompt: <slug>\n` seguito da `_HEADER` e dal corpo.
 
-- [ ] **Step 1: Copiare linee guida e script**
+- [x] **Step 1: Copiare linee guida e script**
 
 ```bash
 mkdir -p $DST/backend/agents/prompts $DST/backend/scripts
@@ -399,7 +399,7 @@ cp $SRC/backend/tests/test_prompts_loader.py $DST/backend/tests/
 
 In `LINEEGUIDA.md` §4: brand "13 Protein" al posto di "Note del Chianti", pubblico "aziende che cercano un produttore", tono "professionale e concreto, dare del lei in italiano"; rimuovere il riferimento alle essenze.
 
-- [ ] **Step 2: Scrivere `backend/agents/prompts/__init__.py`**
+- [x] **Step 2: Scrivere `backend/agents/prompts/__init__.py`**
 
 ```python
 """Carica agents/prompts/<slug>.txt e riempie i {placeholder} con str.replace
@@ -442,7 +442,7 @@ def load(slug: str, **placeholders: object) -> str:
     return text
 ```
 
-- [ ] **Step 3: Adattare `test_prompts_loader.py`**: aggiungere
+- [x] **Step 3: Adattare `test_prompts_loader.py`**: aggiungere
 
 ```python
 def test_load_starts_with_slug_line():
@@ -455,7 +455,7 @@ def test_header_mentions_brand_and_no_invention_rule():
 
 e togliere le asserzioni sui prompt dell'Alchimista.
 
-- [ ] **Step 4: Scrivere i 13 prompt segnaposto**
+- [x] **Step 4: Scrivere i 13 prompt segnaposto**
 
 Tutti con la stessa ossatura. Template per i **conversazionali** (esempio `introduction.txt`):
 
@@ -504,14 +504,14 @@ Placeholder attesi per file (verificare ognuno con `check_prompt_placeholders`):
 | `evaluation` | `transcript` | JSON `{"outcome","path_summary","problem","quote_requested"}`; minimizzazione: niente nomi/aziende/email nel riassunto |
 | `report_summary` | `stats_json` | JSON `{"friction_text","recommendations"}` in italiano, solo giudizi, mai numeri nuovi |
 
-- [ ] **Step 5: Verificare i placeholder**
+- [x] **Step 5: Verificare i placeholder**
 
 Run (dal `backend/`): per ogni slug, es. `python -m scripts.check_prompt_placeholders ask_format default_language,category`
 Expected: exit 0 per tutti e 13.
 
-- [ ] **Step 6: Test** — Run: `python -m pytest tests/test_prompts_loader.py -q` — Expected: verde.
+- [x] **Step 6: Test** — Run: `python -m pytest tests/test_prompts_loader.py -q` — Expected: verde.
 
-- [ ] **Step 7: Commit** — `git add backend/agents backend/scripts backend/tests/test_prompts_loader.py && git commit -m "Prompt loader con riga slug e 13 prompt segnaposto"`
+- [x] **Step 7: Commit** — `git add backend/agents backend/scripts backend/tests/test_prompts_loader.py && git commit -m "Prompt loader con riga slug e 13 prompt segnaposto"`
 
 ---
 
@@ -525,7 +525,7 @@ Expected: exit 0 per tutti e 13.
 - Produces: `llm.stream(system, user, history=None, model=None) -> AsyncIterator[str]`, `llm.complete(system, user, model=None) -> str`, `llm.complete_structured(system, user, model=None) -> dict`, `llm.web_complete(system, user, model="") -> str`. Tutti gli agent importano **solo** `services.llm`.
 - Produces: `llm_mock.slug_of(system) -> str | None`, `llm_mock.lang_of(system) -> "en" | "it"`.
 
-- [ ] **Step 1: Scrivere i test**
+- [x] **Step 1: Scrivere i test**
 
 ```python
 # backend/tests/test_llm_mock.py
@@ -599,9 +599,9 @@ async def test_dispatch_to_openrouter(monkeypatch):
     assert await llm.complete("s", "u") == "real"
 ```
 
-- [ ] **Step 2: Eseguire** — Expected: FAIL (moduli mancanti).
+- [x] **Step 2: Eseguire** — Expected: FAIL (moduli mancanti).
 
-- [ ] **Step 3: Scrivere `backend/data/mock_llm.json`**
+- [x] **Step 3: Scrivere `backend/data/mock_llm.json`**
 
 Chiavi = slug. Ogni voce ha `text: {en, it}` (usato da `stream`/`complete`) oppure `json` (usato da `complete_structured`). Le voci con regole dinamiche (`validate_project`, `extract_contact`, `qa_answer`, `summarize_project`) hanno qui solo il fallback; la regola vive in `llm_mock.py`.
 
@@ -641,7 +641,7 @@ Chiavi = slug. Ogni voce ha `text: {en, it}` (usato da `stream`/`complete`) oppu
 }
 ```
 
-- [ ] **Step 4: Scrivere `backend/services/llm_mock.py`**
+- [x] **Step 4: Scrivere `backend/services/llm_mock.py`**
 
 ```python
 """Provider LLM mock: risposte deterministiche per slug del prompt.
@@ -778,7 +778,7 @@ async def web_complete(system: str, user: str, model: str = "") -> str:
 
 > Nota per `qa_intro`/`confirm_lead`: i prompt `qa_intro.txt` e `confirm_lead.txt` devono avere una sezione finale `# Input` seguita dal placeholder (`{project_description}` / `{lead_json}`), così il mock lo ritrova nel system prompt già riempito. I test degli handler (Task 8) coprono il caso.
 
-- [ ] **Step 5: Scrivere `backend/services/llm.py`**
+- [x] **Step 5: Scrivere `backend/services/llm.py`**
 
 ```python
 """Unico punto d'ingresso LLM per gli agent. Sceglie il provider da
@@ -813,9 +813,9 @@ async def web_complete(system: str, user: str, model: str = "") -> str:
     return await _backend().web_complete(system, user, model=model)
 ```
 
-- [ ] **Step 6: Test** — Run: `python -m pytest tests/test_llm_mock.py tests/test_llm_dispatch.py -q` — Expected: verdi.
+- [x] **Step 6: Test** — Run: `python -m pytest tests/test_llm_mock.py tests/test_llm_dispatch.py -q` — Expected: verdi.
 
-- [ ] **Step 7: Commit** — `git add backend/services/llm.py backend/services/llm_mock.py backend/data/mock_llm.json backend/tests/test_llm_*.py && git commit -m "Provider LLM mock deterministico e dispatcher services.llm"`
+- [x] **Step 7: Commit** — `git add backend/services/llm.py backend/services/llm_mock.py backend/data/mock_llm.json backend/tests/test_llm_*.py && git commit -m "Provider LLM mock deterministico e dispatcher services.llm"`
 
 ---
 
@@ -830,7 +830,7 @@ async def web_complete(system: str, user: str, model: str = "") -> str:
 - Produces: `retrieval.CATEGORY_DOC = {"proteins": "protein-powders", "performance_and_training": "performance-training", "health_and_wellness": "health-wellness", "weight_management_and_meal_solutions": "weight-management", "drinks_shots_gels": "drinks-shots-gels", "stick_packs_and_single_servings": "stick-packs", "skincare_and_cosmetics": "skincare-cosmetics"}` (slug del form → `doc` del jsonl).
 - Produces: `retrieval.format_context(chunks) -> str` nel formato `[n] Title (url)\n<text>` letto anche dal mock.
 
-- [ ] **Step 1: Test**
+- [x] **Step 1: Test**
 
 ```python
 # backend/tests/test_retrieval_keyword.py
@@ -880,9 +880,9 @@ def test_format_context():
     assert text.startswith("[1] Quality (https://x/quality)\n")
 ```
 
-- [ ] **Step 2: Eseguire** — Expected: FAIL.
+- [x] **Step 2: Eseguire** — Expected: FAIL.
 
-- [ ] **Step 3: Scrivere `backend/services/retrieval_keyword.py`**
+- [x] **Step 3: Scrivere `backend/services/retrieval_keyword.py`**
 
 ```python
 """Retrieval a parole chiave in memoria su knowledgebase.jsonl. Nessuna
@@ -949,7 +949,7 @@ class Index:
         return None
 ```
 
-- [ ] **Step 4: Scrivere `backend/services/retrieval.py`**
+- [x] **Step 4: Scrivere `backend/services/retrieval.py`**
 
 ```python
 """Facciata del retrieval: keyword (default) o qdrant, scelto da settings."""
@@ -994,13 +994,13 @@ def doc_card(doc: str) -> dict | None:
     return index().doc_card(doc)
 ```
 
-- [ ] **Step 5: Adattare `qdrant.py` e `migrate_kb.py`**
+- [x] **Step 5: Adattare `qdrant.py` e `migrate_kb.py`**
 
 `cp $SRC/backend/services/qdrant.py $DST/backend/services/` e: `COLLECTION = settings.qdrant_collection`; il filtro `must_not` usa `key: "doc"`; `search(query, limit, exclude_docs)`; il fallback su errore diventa `retrieval_keyword` (log exception, poi `index().search`). `migrate_kb.py` = `migrate_essences.py` copiato, che legge il jsonl da `settings.kb_path` e indicizza `page_title + section + text` con il chunk come payload. Copiare `test_services_qdrant.py` e adattare i nomi. Non è verificabile qui contro un Qdrant reale: i test mockano httpx come nella sorgente.
 
-- [ ] **Step 6: Test** — Run: `python -m pytest tests/test_retrieval_keyword.py tests/test_services_qdrant.py -q` — Expected: verdi. Inoltre: `python -c "from services import retrieval; print(retrieval.search.__name__, len(retrieval.index().rows))"` da `backend/` deve stampare `search 171` (173 chunk meno i 2 draft).
+- [x] **Step 6: Test** — Run: `python -m pytest tests/test_retrieval_keyword.py tests/test_services_qdrant.py -q` — Expected: verdi. Inoltre: `python -c "from services import retrieval; print(retrieval.search.__name__, len(retrieval.index().rows))"` da `backend/` deve stampare `search 171` (173 chunk meno i 2 draft).
 
-- [ ] **Step 7: Commit** — `git add backend/services/retrieval*.py backend/services/qdrant.py backend/scripts/migrate_kb.py backend/tests/test_retrieval_keyword.py backend/tests/test_services_qdrant.py && git commit -m "Retrieval sul knowledgebase: indice keyword in memoria e adapter Qdrant"`
+- [x] **Step 7: Commit** — `git add backend/services/retrieval*.py backend/services/qdrant.py backend/scripts/migrate_kb.py backend/tests/test_retrieval_keyword.py backend/tests/test_services_qdrant.py && git commit -m "Retrieval sul knowledgebase: indice keyword in memoria e adapter Qdrant"`
 
 ---
 
@@ -1010,7 +1010,7 @@ def doc_card(doc: str) -> dict | None:
 - Create: `backend/lib/__init__.py`, `backend/lib/labels.py`
 - Test: `backend/tests/test_labels.py`
 
-- [ ] **Step 1: Test**
+- [x] **Step 1: Test**
 
 ```python
 from lib import labels
@@ -1033,7 +1033,7 @@ def test_values_and_label_for():
     assert labels.label_for("category", "unknown", "en") == "unknown"
 ```
 
-- [ ] **Step 2: Scrivere `backend/lib/labels.py`**
+- [x] **Step 2: Scrivere `backend/lib/labels.py`**
 
 ```python
 """Bottoni canonici: valore = slug del form del sito (knowledgebase/site/forms.md),
@@ -1096,7 +1096,7 @@ def dynamic_buttons(values_: list[str]) -> list[dict]:
     return [{"label": v, "value": v} for v in values_]
 ```
 
-- [ ] **Step 3: Test e commit** — `python -m pytest tests/test_labels.py -q` verde; `git add backend/lib backend/tests/test_labels.py && git commit -m "Etichette dei bottoni con gli slug del form del sito"`
+- [x] **Step 3: Test e commit** — `python -m pytest tests/test_labels.py -q` verde; `git add backend/lib backend/tests/test_labels.py && git commit -m "Etichette dei bottoni con gli slug del form del sito"`
 
 ---
 
@@ -1112,11 +1112,11 @@ def dynamic_buttons(values_: list[str]) -> list[dict]:
 - `contact_agents`: `ask_contact(lang) -> AsyncIterator[str]`, `extract_contact(message, lang) -> dict`.
 - Tutti passano `default_language=_LANG_NAME[lang]` e usano **solo** `services.llm`.
 
-- [ ] **Step 1: Test** (stile `test_agents_intro.py` della sorgente: monkeypatch di `llm.stream`/`complete_structured` con finti async generator, assert sul system prompt che contiene `# Prompt: <slug>` e i placeholder riempiti). Almeno: `introduction` produce token; `validate_project` mappa `{"enough": true}` → `(True, "")`; `qa_answer` costruisce il messaggio utente con `[1] Title (url)`; `extract_contact` restituisce il dict così com'è; `confirm_lead` serializza il lead con `ensure_ascii=False`.
+- [x] **Step 1: Test** (stile `test_agents_intro.py` della sorgente: monkeypatch di `llm.stream`/`complete_structured` con finti async generator, assert sul system prompt che contiene `# Prompt: <slug>` e i placeholder riempiti). Almeno: `introduction` produce token; `validate_project` mappa `{"enough": true}` → `(True, "")`; `qa_answer` costruisce il messaggio utente con `[1] Title (url)`; `extract_contact` restituisce il dict così com'è; `confirm_lead` serializza il lead con `ensure_ascii=False`.
 
-- [ ] **Step 2: Implementare** i tre moduli (~30 righe ciascuno), sul modello di `intro_agents.py`/`validator.py` della sorgente ma con `from services import llm`.
+- [x] **Step 2: Implementare** i tre moduli (~30 righe ciascuno), sul modello di `intro_agents.py`/`validator.py` della sorgente ma con `from services import llm`.
 
-- [ ] **Step 3: Test e commit** — `python -m pytest tests/test_agents_*.py -q` verde; commit `"Agent del flusso lead, domande libere e contatto"`.
+- [x] **Step 3: Test e commit** — `python -m pytest tests/test_agents_*.py -q` verde; commit `"Agent del flusso lead, domande libere e contatto"`.
 
 ---
 
@@ -1130,7 +1130,7 @@ def dynamic_buttons(values_: list[str]) -> list[dict]:
 - Ogni handler: `async def handle_x(state: SessionState, message: str) -> AsyncIterator[Event]`.
 - `router.HANDLERS: dict[Step, Handler]`, `router.dispatch(step)`.
 
-- [ ] **Step 1: Test per handler** (stile `tests/handlers/test_intro.py` della sorgente: gli agent sono monkeypatchati con generatori finti, `retrieval.search`/`doc_card` con `AsyncMock`/lambda). Coprire almeno:
+- [x] **Step 1: Test per handler** (stile `tests/handlers/test_intro.py` della sorgente: gli agent sono monkeypatchati con generatori finti, `retrieval.search`/`doc_card` con `AsyncMock`/lambda). Coprire almeno:
   - `intro.handle`: `TextEvent` poi `ButtonsEvent(profile)`, `DoneEvent(input_enabled=False)`, step `PROFILE_SELECT`.
   - `intro.handle_profile` con valore non valido: rimanda i bottoni e resta su `PROFILE_SELECT`.
   - `intro.handle_category` con `proteins`: `CarouselEvent` con una card dal `doc_card`; con `not_sure_yet`: nessun carosello.
@@ -1140,7 +1140,7 @@ def dynamic_buttons(values_: list[str]) -> list[dict]:
   - `contact.handle_confirm` con `edit`: torna a `CONTACT_INPUT`; con `confirm`: `LeadInfoEvent`, `DoneEvent(step="completed", input_enabled=False)`, `state.lead_info` valorizzato.
   - `router`: ogni `Step` tranne nessuno ha un handler; `dispatch(Step.INTRO) is intro.handle`.
 
-- [ ] **Step 2: Implementare `handlers/intro.py`**
+- [x] **Step 2: Implementare `handlers/intro.py`**
 
 ```python
 from __future__ import annotations
@@ -1215,7 +1215,7 @@ async def handle_format(state: SessionState, message: str) -> AsyncIterator[Even
     yield DoneEvent(step=state.current_step.value, input_enabled=True)
 ```
 
-- [ ] **Step 3: Implementare `handlers/project.py`**
+- [x] **Step 3: Implementare `handlers/project.py`**
 
 ```python
 from __future__ import annotations
@@ -1253,7 +1253,7 @@ async def start_qa(state: SessionState) -> AsyncIterator[Event]:
     yield DoneEvent(step=state.current_step.value, input_enabled=True)
 ```
 
-- [ ] **Step 4: Implementare `handlers/qa.py`**
+- [x] **Step 4: Implementare `handlers/qa.py`**
 
 ```python
 from __future__ import annotations
@@ -1284,7 +1284,7 @@ async def handle(state: SessionState, message: str) -> AsyncIterator[Event]:
     yield DoneEvent(step=state.current_step.value, input_enabled=True)
 ```
 
-- [ ] **Step 5: Implementare `handlers/contact.py`**
+- [x] **Step 5: Implementare `handlers/contact.py`**
 
 ```python
 from __future__ import annotations
@@ -1343,7 +1343,7 @@ async def handle_completed(state: SessionState, message: str) -> AsyncIterator[E
     yield DoneEvent(step="completed", input_enabled=False)
 ```
 
-- [ ] **Step 6: `router.py`**
+- [x] **Step 6: `router.py`**
 
 ```python
 from typing import Callable
@@ -1372,7 +1372,7 @@ def dispatch(step: Step) -> Handler:
     return handler
 ```
 
-- [ ] **Step 7: Test e commit** — `python -m pytest tests/handlers tests/test_router.py -q` verde; commit `"Handler della state machine lead e router"`.
+- [x] **Step 7: Test e commit** — `python -m pytest tests/handlers tests/test_router.py -q` verde; commit `"Handler della state machine lead e router"`.
 
 ---
 
@@ -1382,9 +1382,9 @@ def dispatch(step: Step) -> Handler:
 - Create: `backend/main.py` (copiato e adattato), `backend/agents/evaluation.py` (copiato e adattato), `backend/scripts/init_db.sql` (riscritto), `backend/testing_env.py` + `backend/data/testing_facsimiles.json`, `backend/retention.py` (copiato), `backend/scripts/purge_expired.py` (copiato)
 - Test: `backend/tests/test_main_completion.py`, `test_main_error_stream.py`, `test_main_skip.py`, `test_main_testing_flag.py`, `test_main_usage_carry.py`, `test_evaluation.py`, `test_retention.py`, `test_testing_env.py` (copiati e adattati)
 
-- [ ] **Step 1: Copiare** `main.py`, `agents/evaluation.py`, `retention.py`, `testing_env.py`, `scripts/purge_expired.py` e i test elencati.
+- [x] **Step 1: Copiare** `main.py`, `agents/evaluation.py`, `retention.py`, `testing_env.py`, `scripts/purge_expired.py` e i test elencati.
 
-- [ ] **Step 2: Adattare `main.py`**
+- [x] **Step 2: Adattare `main.py`**
 
 - Import: `from models import Step, ButtonsEvent, CarouselEvent, ErrorEvent, MessageBreakEvent, MESSAGE_BREAK`; `app = FastAPI(title="13 Protein Agent")`.
 - `_STREAM_ERROR_MESSAGE`: chiavi `en` (default) e `it`; `lang = req.default_language or "en"`.
@@ -1402,9 +1402,9 @@ e in `chat()`: `before_topics = set(state.topics_cited)` prima del dispatch; dop
 - `/report`: invariato (usa `reporting.build_report` del Task 10).
 - Tutto il resto (transazioni brevi, carry-forward, `collect_payload`, retention loop) invariato.
 
-- [ ] **Step 3: Adattare `agents/evaluation.py`**: `from services import llm` al posto di `openrouter`; campi upsert `outcome`, `summary=path_summary`, `friction_note=problem`, `quote_requested=bool(...)`, `model=llm.DEFAULT_MODEL if settings.llm_provider != "mock" else "mock"`.
+- [x] **Step 3: Adattare `agents/evaluation.py`**: `from services import llm` al posto di `openrouter`; campi upsert `outcome`, `summary=path_summary`, `friction_note=problem`, `quote_requested=bool(...)`, `model=llm.DEFAULT_MODEL if settings.llm_provider != "mock" else "mock"`.
 
-- [ ] **Step 4: Scrivere `backend/scripts/init_db.sql`** (schema pulito)
+- [x] **Step 4: Scrivere `backend/scripts/init_db.sql`** (schema pulito)
 
 ```sql
 CREATE TABLE IF NOT EXISTS sessions (
@@ -1474,11 +1474,11 @@ CREATE TABLE IF NOT EXISTS app_settings (
 );
 ```
 
-- [ ] **Step 5: `testing_env.py`**: `FIELD_SENTINELS` = i valori vuoti di `to_lead_info()` (`profile: None`, `category: None`, `format: None`, `projectDescription: None`, `questionsAsked: []`, `topicsCited: []`, `quoteRequested: False`, `contact: {"name": None, "company": None, "email": None}`); `DEFAULT_PATH = "product_idea"`; `data/testing_facsimiles.json` con una voce per profilo (4) contenente un `lead_info` di esempio completo.
+- [x] **Step 5: `testing_env.py`**: `FIELD_SENTINELS` = i valori vuoti di `to_lead_info()` (`profile: None`, `category: None`, `format: None`, `projectDescription: None`, `questionsAsked: []`, `topicsCited: []`, `quoteRequested: False`, `contact: {"name": None, "company": None, "email": None}`); `DEFAULT_PATH = "product_idea"`; `data/testing_facsimiles.json` con una voce per profilo (4) contenente un `lead_info` di esempio completo.
 
-- [ ] **Step 6: Adattare i test** ai nuovi nomi (`new_topics`, `lead_info`, `profile`), poi eseguire: `python -m pytest tests/test_main_*.py tests/test_evaluation.py tests/test_retention.py tests/test_testing_env.py -q` — Expected: verdi.
+- [x] **Step 6: Adattare i test** ai nuovi nomi (`new_topics`, `lead_info`, `profile`), poi eseguire: `python -m pytest tests/test_main_*.py tests/test_evaluation.py tests/test_retention.py tests/test_testing_env.py -q` — Expected: verdi.
 
-- [ ] **Step 7: Commit** — `"Ciclo del turno, valutazione in background, schema Postgres e ambiente di test"`
+- [x] **Step 7: Commit** — `"Ciclo del turno, valutazione in background, schema Postgres e ambiente di test"`
 
 ---
 
@@ -1492,10 +1492,10 @@ CREATE TABLE IF NOT EXISTS app_settings (
 - `reporting.build_report(conn, date_from, date_to) -> dict` con chiavi `period`, `total_sessions`, `outcomes` (invariato, `initialized` = abbandonate con `profile IS NULL`), `by_profile`, `by_category`, `by_format` (ognuna `[{value, total, completed, completion_rate}]`), `quote` (`{requested, decided_total, rate}`), `duration`, `friction` (invariato), `top_topics` (`[{doc, count}]` da `session_topics`), `by_weekday`.
 - `report_agents.generate_narrative(stats) -> dict` (`friction_text`, `recommendations`) via `llm.complete_structured`.
 
-- [ ] **Step 1: Copiare e riscrivere** le funzioni sul modello della sorgente: `path_performance` → `_breakdown(conn, column, ...)` parametrica su `profile|category|format`; `delegate_rate` → `quote_rate` (`count(*) FILTER (WHERE quote_requested)` sulle sessioni decise); `essence_swap_rate` rimosso; `top_essences` → `top_topics`.
-- [ ] **Step 2: Test**: i test della sorgente mockano `conn.fetch`/`fetchrow`; adattarli alle nuove chiavi e aggiungere `test_build_report_keys`.
-- [ ] **Step 3: `preview_prompts.py`**: registry con i prompt conversazionali del Task 3 e fixture di esempio (profilo, categoria, formato, progetto, chunk KB).
-- [ ] **Step 4: Test e commit** — `python -m pytest -q` (tutta la suite backend) verde; commit `"Reporting del Resoconto per profilo, categoria, formato e topic"`.
+- [x] **Step 1: Copiare e riscrivere** le funzioni sul modello della sorgente: `path_performance` → `_breakdown(conn, column, ...)` parametrica su `profile|category|format`; `delegate_rate` → `quote_rate` (`count(*) FILTER (WHERE quote_requested)` sulle sessioni decise); `essence_swap_rate` rimosso; `top_essences` → `top_topics`.
+- [x] **Step 2: Test**: i test della sorgente mockano `conn.fetch`/`fetchrow`; adattarli alle nuove chiavi e aggiungere `test_build_report_keys`.
+- [x] **Step 3: `preview_prompts.py`**: registry con i prompt conversazionali del Task 3 e fixture di esempio (profilo, categoria, formato, progetto, chunk KB).
+- [x] **Step 4: Test e commit** — `python -m pytest -q` (tutta la suite backend) verde; commit `"Reporting del Resoconto per profilo, categoria, formato e topic"`.
 
 ---
 
@@ -1505,14 +1505,14 @@ CREATE TABLE IF NOT EXISTS app_settings (
 - Create: `server/index.js`, `server/routes/{chat,chats,chat-settings,chat-skip,track,report,admin-users}.js`, `server/lib/{admin-auth,admin-users,rate-limit,analytics,segments,retention}.js`, `server/scripts/{create-admin,purge-expired}.js`
 - Test: `server/lib/{admin-auth,admin-users,rate-limit,segments,retention}.test.js`, `server/routes/{chat-settings,report}.test.js`
 
-- [ ] **Step 1: Copiare** i file elencati dalla sorgente (`server/lib/legacy-*`, `recipe*`, `purchase`, `essence-numbers`, `shop/`, `perfume*`, `create-cart`, `get-recipe`, `update-recipe`, `recipe-transcript`, `id.js` **non** si copiano).
-- [ ] **Step 2: Adattare `server/index.js`**: togliere import e route di ricette/perfume/cart/shop, `getShopAdapter().validateConfig()` e il log e-commerce; togliere il perm `ricette`; tenere `chat`, `resoconto`, `user-management`; route rimanenti: `/api/track`, `/api/chat`, `/api/admin/login`, `/api/admin/users*`, `/api/chats*`, `/api/chat-settings`, `/api/report/stats`, `/api/report`, `/api/chat/skip`, `/admin*`, statici, fallback SPA.
-- [ ] **Step 3: Adattare `routes/chats.js`**: semplice proxy, senza `enrichPurchases`.
-- [ ] **Step 4: Adattare `routes/track.js` e `routes/report.js`**: `ALLOWED_EVENTS = page_view, cta_click, chat_complete, quote_request`; `computeFunnel` conta `quote_requests` al posto di `add_to_carts` (niente taglie).
-- [ ] **Step 5: Adattare `lib/admin-users.js`**: `ALL_PERMS = ['chat', 'resoconto', 'user-management']`.
-- [ ] **Step 6: Adattare `lib/retention.js`**: tenere solo `pruneAnalyticsLines`, `retentionConfig`, `purgeCycle`, `startRetentionLoop` (analytics JSONL); rimuovere record profumo e transcript legacy; adattare il test.
-- [ ] **Step 7: Test** — Run: `npm test` — Expected: verde (i test copiati: auth, users, rate-limit, segments, retention ridotto, chat-settings, report adattato).
-- [ ] **Step 8: Commit** — `"Server Node: proxy SSE, admin, analytics e retention senza e-commerce"`
+- [x] **Step 1: Copiare** i file elencati dalla sorgente (`server/lib/legacy-*`, `recipe*`, `purchase`, `essence-numbers`, `shop/`, `perfume*`, `create-cart`, `get-recipe`, `update-recipe`, `recipe-transcript`, `id.js` **non** si copiano).
+- [x] **Step 2: Adattare `server/index.js`**: togliere import e route di ricette/perfume/cart/shop, `getShopAdapter().validateConfig()` e il log e-commerce; togliere il perm `ricette`; tenere `chat`, `resoconto`, `user-management`; route rimanenti: `/api/track`, `/api/chat`, `/api/admin/login`, `/api/admin/users*`, `/api/chats*`, `/api/chat-settings`, `/api/report/stats`, `/api/report`, `/api/chat/skip`, `/admin*`, statici, fallback SPA.
+- [x] **Step 3: Adattare `routes/chats.js`**: semplice proxy, senza `enrichPurchases`.
+- [x] **Step 4: Adattare `routes/track.js` e `routes/report.js`**: `ALLOWED_EVENTS = page_view, cta_click, chat_complete, quote_request`; `computeFunnel` conta `quote_requests` al posto di `add_to_carts` (niente taglie).
+- [x] **Step 5: Adattare `lib/admin-users.js`**: `ALL_PERMS = ['chat', 'resoconto', 'user-management']`.
+- [x] **Step 6: Adattare `lib/retention.js`**: tenere solo `pruneAnalyticsLines`, `retentionConfig`, `purgeCycle`, `startRetentionLoop` (analytics JSONL); rimuovere record profumo e transcript legacy; adattare il test.
+- [x] **Step 7: Test** — Run: `npm test` — Expected: verde (i test copiati: auth, users, rate-limit, segments, retention ridotto, chat-settings, report adattato).
+- [x] **Step 8: Commit** — `"Server Node: proxy SSE, admin, analytics e retention senza e-commerce"`
 
 ---
 
@@ -1522,17 +1522,17 @@ CREATE TABLE IF NOT EXISTS app_settings (
 - Create: `src/main.jsx`, `src/App.jsx`, `src/globals.css`, `src/index.css`, `src/App.css`, `src/contexts/{ConversationContext,LanguageContext}.jsx`, `src/i18n/translations.js`, `src/utils/{route,track,clientEnv}.js` (+ test), `src/api/Retrieve.jsx`, `src/components/{Conversation,Chat,Message,UserInput,TestingGate,PrivacyPolicy}/*`, `src/components/LandingPage/LandingPage.jsx` (+ css, minima), `src/components/Journey/Journey.jsx`, `src/components/LeadSummary/{LeadSummary.jsx,LeadSummary.css}`
 - Create: `public/favicon.svg` (segnaposto), `public/robots.txt`
 
-- [ ] **Step 1: Copiare** `src/main.jsx`, `App.jsx`, `globals.css`, `index.css`, `App.css`, contexts, `i18n/translations.js`, `utils/*`, `api/Retrieve.jsx`, `components/{Conversation,Chat,Message,UserInput,TestingGate,PrivacyPolicy}`.
-- [ ] **Step 2: `Retrieve.jsx`**: caso `general_info` → `lead_info`, handler `onLeadInfo`, flag `isLeadInfoSet`.
-- [ ] **Step 3: `Conversation.jsx`**: prop `updateLeadInfo`; `onLeadInfo`; titolo `t.chat.title`; `sessionStorage` key `agent13_skipLanding`; il `session_id` resta `<env>_<random>_<ts>`.
-- [ ] **Step 4: `LanguageContext.jsx`**: `getLanguageFromURL` → `it` se il path inizia con `/it`, altrimenti `en`; `toggleLanguage` naviga a `/it` o `/`; `localePath` prefissa `/it`. `utils/route.js::normalizePath` toglie il prefisso `/it`. Aggiornare i test copiati.
-- [ ] **Step 5: `translations.js`**: riscrivere solo le chiavi usate (`chat.*`, `landing.*`, `leadSummary.*`, `privacy.*`, `testing.*`), EN e IT, senza brand Alchimista; `typingVariants` es. "The assistant is checking the knowledge base…".
-- [ ] **Step 6: `LandingPage.jsx`** minima: titolo "13 Protein · Project assistant", una riga, toggle EN/IT, bottone Start (`trackEvent('cta_click')`, `setHasBegun(true)`), riga di disclosure AI + link privacy.
-- [ ] **Step 7: `Journey.jsx`** (ex `Ritual`): `Conversation` + `LeadSummary` quando la chat finisce; nessun POST (il lead è già in Postgres nello stato); `trackEvent('quote_request')` se `leadInfo.quoteRequested`.
-- [ ] **Step 8: `LeadSummary.jsx`**: tabella a due colonne dei campi di `lead_info` (label da `t.leadSummary.fields`), contatto e topic citati come lista.
-- [ ] **Step 9: `App.jsx`**: route `/privacy-policy`, `/testing`, altrimenti landing ↔ `Journey`.
-- [ ] **Step 10: Verifica** — Run: `npm run lint && npm run build && npm test` — Expected: build ok, nessun errore lint nuovo, test verdi.
-- [ ] **Step 11: Commit** — `"Frontend cliente: chat riusata, landing minima e riepilogo del lead"`
+- [x] **Step 1: Copiare** `src/main.jsx`, `App.jsx`, `globals.css`, `index.css`, `App.css`, contexts, `i18n/translations.js`, `utils/*`, `api/Retrieve.jsx`, `components/{Conversation,Chat,Message,UserInput,TestingGate,PrivacyPolicy}`.
+- [x] **Step 2: `Retrieve.jsx`**: caso `general_info` → `lead_info`, handler `onLeadInfo`, flag `isLeadInfoSet`.
+- [x] **Step 3: `Conversation.jsx`**: prop `updateLeadInfo`; `onLeadInfo`; titolo `t.chat.title`; `sessionStorage` key `agent13_skipLanding`; il `session_id` resta `<env>_<random>_<ts>`.
+- [x] **Step 4: `LanguageContext.jsx`**: `getLanguageFromURL` → `it` se il path inizia con `/it`, altrimenti `en`; `toggleLanguage` naviga a `/it` o `/`; `localePath` prefissa `/it`. `utils/route.js::normalizePath` toglie il prefisso `/it`. Aggiornare i test copiati.
+- [x] **Step 5: `translations.js`**: riscrivere solo le chiavi usate (`chat.*`, `landing.*`, `leadSummary.*`, `privacy.*`, `testing.*`), EN e IT, senza brand Alchimista; `typingVariants` es. "The assistant is checking the knowledge base…".
+- [x] **Step 6: `LandingPage.jsx`** minima: titolo "13 Protein · Project assistant", una riga, toggle EN/IT, bottone Start (`trackEvent('cta_click')`, `setHasBegun(true)`), riga di disclosure AI + link privacy.
+- [x] **Step 7: `Journey.jsx`** (ex `Ritual`): `Conversation` + `LeadSummary` quando la chat finisce; nessun POST (il lead è già in Postgres nello stato); `trackEvent('quote_request')` se `leadInfo.quoteRequested`.
+- [x] **Step 8: `LeadSummary.jsx`**: tabella a due colonne dei campi di `lead_info` (label da `t.leadSummary.fields`), contatto e topic citati come lista.
+- [x] **Step 9: `App.jsx`**: route `/privacy-policy`, `/testing`, altrimenti landing ↔ `Journey`.
+- [x] **Step 10: Verifica** — Run: `npm run lint && npm run build && npm test` — Expected: build ok, nessun errore lint nuovo, test verdi.
+- [x] **Step 11: Commit** — `"Frontend cliente: chat riusata, landing minima e riepilogo del lead"`
 
 ---
 
@@ -1541,12 +1541,12 @@ CREATE TABLE IF NOT EXISTS app_settings (
 **Files:**
 - Create: `src/admin/{main.jsx,AdminShell.jsx,AdminShell.css,auth.js}`, `src/admin/charts/*`, `src/admin/modules/UtentiModule.*`, `src/admin/modules/chat/{ChatList,ChatDetail,PathFilter→ProfileFilter,filters,format}.*` (+ test), `src/admin/modules/resoconto/{ResocontoModule.*,format.js,reportText.js,sections/*}` (+ test)
 
-- [ ] **Step 1: Copiare** tutto `src/admin/` tranne `modules/RicetteModule.*` e `modules/recipeView.*`.
-- [ ] **Step 2: `AdminShell.jsx`**: `PERM_TO_PATH` e `MODULE_LABEL` senza `ricette`; logo testuale "13 Protein · Admin"; route senza `/ricette`.
-- [ ] **Step 3: Chat**: `filters.js` → `matchesProfiles` sui 4 profili; `PathFilter` → `ProfileFilter`; `format.js` → `profileLabel`, `STATUS_LABEL` invariato; `ChatDetail` mostra `profile/category/format/quote_requested` e l'evaluation con "Preventivo richiesto: sì/no"; togliere il bottone "Vai alla ricetta" e la fetch `perfume-by-session`; colonna "Acquistate" del select → rimuovere (resta Tutte/Completate).
-- [ ] **Step 4: Resoconto**: sezioni `FunnelSection` (page_view → cta → chat_complete → quote_request), `DispositiviSection`, `EsitiSection`, `ProfiliSection` (barre per profile/category/format da `stats.by_*`), `TopicSection` (tabella `top_topics`), `SettimanaSection`; rimuovere `EssenzeSection`/`PercorsiSection`; `reportText.js` riscritto sulle nuove chiavi (test aggiornato).
-- [ ] **Step 5: Verifica** — `npm run lint && npm run build && npm test` — Expected: ok.
-- [ ] **Step 6: Commit** — `"Admin: moduli Chat, Resoconto e Utenti sul dominio lead"`
+- [x] **Step 1: Copiare** tutto `src/admin/` tranne `modules/RicetteModule.*` e `modules/recipeView.*`.
+- [x] **Step 2: `AdminShell.jsx`**: `PERM_TO_PATH` e `MODULE_LABEL` senza `ricette`; logo testuale "13 Protein · Admin"; route senza `/ricette`.
+- [x] **Step 3: Chat**: `filters.js` → `matchesProfiles` sui 4 profili; `PathFilter` → `ProfileFilter`; `format.js` → `profileLabel`, `STATUS_LABEL` invariato; `ChatDetail` mostra `profile/category/format/quote_requested` e l'evaluation con "Preventivo richiesto: sì/no"; togliere il bottone "Vai alla ricetta" e la fetch `perfume-by-session`; colonna "Acquistate" del select → rimuovere (resta Tutte/Completate).
+- [x] **Step 4: Resoconto**: sezioni `FunnelSection` (page_view → cta → chat_complete → quote_request), `DispositiviSection`, `EsitiSection`, `ProfiliSection` (barre per profile/category/format da `stats.by_*`), `TopicSection` (tabella `top_topics`), `SettimanaSection`; rimuovere `EssenzeSection`/`PercorsiSection`; `reportText.js` riscritto sulle nuove chiavi (test aggiornato).
+- [x] **Step 5: Verifica** — `npm run lint && npm run build && npm test` — Expected: ok.
+- [x] **Step 6: Commit** — `"Admin: moduli Chat, Resoconto e Utenti sul dominio lead"`
 
 ---
 
@@ -1555,10 +1555,10 @@ CREATE TABLE IF NOT EXISTS app_settings (
 **Files:**
 - Create: `Dockerfile`, `backend/Dockerfile`, `docker-compose.local.yml`, `docker-compose.prod.yml`, `start.local.sh`, `start.prod.sh`
 
-- [ ] **Step 1: Copiare** `Dockerfile` (root, togliere `RUN mkdir -p /data/recipes` e `RECIPES_DIR`), `backend/Dockerfile`, `docker-compose.local.yml` e `docker-compose.atelier.yml` → `docker-compose.prod.yml`, `start.local.sh`, `start.prod.sh`.
-- [ ] **Step 2: Adattare**: `name: agent13_*`; servizio `app` senza `PS_*`/`SHOPIFY_*`/`RECIPES_DIR`/`RETENTION_RECIPE_DAYS`/`RETENTION_PURCHASED_RECIPE_DAYS`; servizio `backend` con `LLM_PROVIDER`, `RETRIEVAL_PROVIDER`, `KB_PATH=/app/knowledgebase/knowledgebase.jsonl` e un volume `./knowledgebase:/app/knowledgebase:ro`; Postgres `POSTGRES_DB: agent13`; Qdrant resta ma è opzionale (profilo compose `qdrant`).
-- [ ] **Step 3: Verifica** — `docker compose -f docker-compose.local.yml config >/dev/null` (valida la sintassi anche senza daemon) — Expected: exit 0. Nota: l'esecuzione reale non è possibile in questa sessione (nessun daemon).
-- [ ] **Step 4: Commit** — `"Docker e compose dell'harness (non eseguiti in questa sessione)"`
+- [x] **Step 1: Copiare** `Dockerfile` (root, togliere `RUN mkdir -p /data/recipes` e `RECIPES_DIR`), `backend/Dockerfile`, `docker-compose.local.yml` e `docker-compose.atelier.yml` → `docker-compose.prod.yml`, `start.local.sh`, `start.prod.sh`.
+- [x] **Step 2: Adattare**: `name: agent13_*`; servizio `app` senza `PS_*`/`SHOPIFY_*`/`RECIPES_DIR`/`RETENTION_RECIPE_DAYS`/`RETENTION_PURCHASED_RECIPE_DAYS`; servizio `backend` con `LLM_PROVIDER`, `RETRIEVAL_PROVIDER`, `KB_PATH=/app/knowledgebase/knowledgebase.jsonl` e un volume `./knowledgebase:/app/knowledgebase:ro`; Postgres `POSTGRES_DB: agent13`; Qdrant resta ma è opzionale (profilo compose `qdrant`).
+- [x] **Step 3: Verifica** — `docker compose -f docker-compose.local.yml config >/dev/null` (valida la sintassi anche senza daemon) — Expected: exit 0. Nota: l'esecuzione reale non è possibile in questa sessione (nessun daemon).
+- [x] **Step 4: Commit** — `"Docker e compose dell'harness (non eseguiti in questa sessione)"`
 
 ---
 
@@ -1567,7 +1567,7 @@ CREATE TABLE IF NOT EXISTS app_settings (
 **Files:**
 - Create: `scripts/e2e-mock.sh`, `scripts/e2e-ui.mjs`, `scripts/dev-local.sh`
 
-- [ ] **Step 1: Postgres locale**
+- [x] **Step 1: Postgres locale**
 
 ```bash
 sudo apt-get install -y postgresql   # 16, già in cache apt
@@ -1576,9 +1576,9 @@ sudo -u postgres psql -c "CREATE USER agent13 WITH PASSWORD 'changeme';" -c "CRE
 psql postgresql://agent13:changeme@localhost/agent13 < backend/scripts/init_db.sql
 ```
 
-- [ ] **Step 2: `scripts/dev-local.sh`** (avvia backend e Node in background su porte 8000/3000 con env mock, `ANALYTICS_LOG=./data/analytics/events.jsonl`, `ADMIN_USERS_FILE=./data/admin/users.json`; crea l'admin `tester`/`tester` con `CREATE_ADMIN_PASSWORD`; `npm run build` prima di avviare Node).
+- [x] **Step 2: `scripts/dev-local.sh`** (avvia backend e Node in background su porte 8000/3000 con env mock, `ANALYTICS_LOG=./data/analytics/events.jsonl`, `ADMIN_USERS_FILE=./data/admin/users.json`; crea l'admin `tester`/`tester` con `CREATE_ADMIN_PASSWORD`; `npm run build` prima di avviare Node).
 
-- [ ] **Step 3: `scripts/e2e-mock.sh`**: con `curl -N`, invia la sequenza fissa delle Global Constraints a `POST http://localhost:3000/api/chat` (stesso `session_id`), salva ogni stream, e verifica con `grep`:
+- [x] **Step 3: `scripts/e2e-mock.sh`**: con `curl -N`, invia la sequenza fissa delle Global Constraints a `POST http://localhost:3000/api/chat` (stesso `session_id`), salva ogni stream, e verifica con `grep`:
   - ogni risposta contiene `event: done`;
   - la 2ª contiene `event: buttons` con `product_idea`; la 4ª contiene `event: carousel`;
   - la 6ª (progetto, secondo giro) contiene `event: message_break` e `request_quote`;
@@ -1588,11 +1588,11 @@ psql postgresql://agent13:changeme@localhost/agent13 < backend/scripts/init_db.s
   - `/api/report/stats?from=<oggi>&to=<oggi>`: `stats.total_sessions >= 1`, `stats.top_topics` contiene `quality`, `funnel.quote_requests >= 1` se l'evento è stato inviato (la UI lo invia; da curl si invia a mano con `POST /api/track`).
   Exit non-zero al primo check fallito.
 
-- [ ] **Step 4: `scripts/e2e-ui.mjs`** (Playwright con Chromium preinstallato, `executablePath: '/opt/pw-browsers/chromium'` se serve): apre `http://localhost:3000`, clicca Start, esegue la stessa sequenza cliccando i bottoni per label e scrivendo i testi, attende `LeadSummary`, screenshot in `docs/superpowers/evidence/2026-09-09/01-lead-summary.png`; poi `/admin`, login `tester`, apre la chat appena creata (screenshot `02-admin-chat.png`) e `/admin/resoconto` (screenshot `03-resoconto.png`). Asserzioni: zero errori console, `LeadSummary` mostra `mario@example.com`.
+- [x] **Step 4: `scripts/e2e-ui.mjs`** (Playwright con Chromium preinstallato, `executablePath: '/opt/pw-browsers/chromium'` se serve): apre `http://localhost:3000`, clicca Start, esegue la stessa sequenza cliccando i bottoni per label e scrivendo i testi, attende `LeadSummary`, screenshot in `docs/superpowers/evidence/2026-09-09/01-lead-summary.png`; poi `/admin`, login `tester`, apre la chat appena creata (screenshot `02-admin-chat.png`) e `/admin/resoconto` (screenshot `03-resoconto.png`). Asserzioni: zero errori console, `LeadSummary` mostra `mario@example.com`.
 
-- [ ] **Step 5: Eseguire** — `scripts/dev-local.sh && scripts/e2e-mock.sh && node scripts/e2e-ui.mjs` — Expected: tutti i check passano; screenshot prodotti.
-- [ ] **Step 6: Anche con lingua `it`**: ripetere `e2e-mock.sh` con `default_language=it` sul launch e verificare che il primo `text` contenga "Benvenuto".
-- [ ] **Step 7: Commit** — `git add scripts docs/superpowers/evidence && git commit -m "Verifica end-to-end del mock: script curl, Playwright e screenshot"`
+- [x] **Step 5: Eseguire** — `scripts/dev-local.sh && scripts/e2e-mock.sh && node scripts/e2e-ui.mjs` — Expected: tutti i check passano; screenshot prodotti.
+- [x] **Step 6: Anche con lingua `it`**: ripetere `e2e-mock.sh` con `default_language=it` sul launch e verificare che il primo `text` contenga "Benvenuto".
+- [x] **Step 7: Commit** — `git add scripts docs/superpowers/evidence && git commit -m "Verifica end-to-end del mock: script curl, Playwright e screenshot"`
 
 ---
 
@@ -1603,10 +1603,35 @@ psql postgresql://agent13:changeme@localhost/agent13 < backend/scripts/init_db.s
 - Create: `README.md` (breve: cos'è, come si avvia in locale, come si passa a `LLM_PROVIDER=openrouter`)
 - Modify: `docs/analisi-alchimista.md` (una riga in testa: "Implementato come harness mock: vedi spec/plan del 2026-09-09")
 
-- [ ] **Step 1: Scrivere**, seguendo lo stile del `CLAUDE.md` esistente (italiano, gotcha espliciti). Elencare i punti **segnaposto** in un'unica lista: prompt, `mock_llm.json`, facsimili di test, traduzioni, landing, privacy, termini di retention.
-- [ ] **Step 2: Commit e push** — `git add CLAUDE.md README.md docs && git commit -m "Documentazione dell'harness mock" && git push -u origin claude/13protein-ai-agent-setup-kkti3l`
+- [x] **Step 1: Scrivere**, seguendo lo stile del `CLAUDE.md` esistente (italiano, gotcha espliciti). Elencare i punti **segnaposto** in un'unica lista: prompt, `mock_llm.json`, facsimili di test, traduzioni, landing, privacy, termini di retention.
+- [x] **Step 2: Commit e push** — `git add CLAUDE.md README.md docs && git commit -m "Documentazione dell'harness mock" && git push -u origin claude/13protein-ai-agent-setup-kkti3l`
 
 ---
+
+## Esecuzione
+
+Eseguito il 2026-09-10 su `claude/13protein-ai-agent-setup-kkti3l`, un commit per
+task. Scostamenti dal piano, tutti annotati nei commit:
+
+- **`qa_intro` non ripete il riassunto**: il riassunto è una bolla propria emessa
+  dall'handler, poi `message_break`, poi l'invito. Il piano lo faceva ripetere
+  dentro `qa_intro`, cioè due volte di seguito nella stessa schermata.
+- **`retrieval_keyword` confronta le radici troncate a 5 caratteri**: con il
+  confronto esatto "are you certified" non trovava la pagina Quality, che scrive
+  "certification".
+- **`llm_mock.lang_of` legge solo la sezione `# Language`**: cercare "italian"
+  in tutto il system prompt rendeva italiana ogni risposta, perché ogni prompt
+  conversazionale ha una sezione `## Italian` fra gli esempi.
+- **`vite.config.js` non usa `__dirname`**: con `"type": "module"` il file è ESM
+  e quella variabile non esiste, il lint la segnalava.
+- **Qdrant sta in un profilo compose**: con il retrieval a parole chiave di
+  default nessuno lo interroga.
+- **Playwright non è una dipendenza del progetto**: il suo postinstall
+  scaricherebbe un browser dentro l'immagine Docker.
+- **L'informativa privacy è un segnaposto dichiarato**, non il testo
+  dell'Alchimista con il marchio cambiato.
+- **Le evidenze stanno in `docs/superpowers/evidence/2026-09-10/`** (la data di
+  esecuzione, non quella del piano).
 
 ## Ordine ed esecuzione
 
