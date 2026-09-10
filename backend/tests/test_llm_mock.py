@@ -5,6 +5,19 @@ def _sys(slug, lang="english"):
     return f"# Prompt: {slug}\n# Language\nWrite in {lang}.\n"
 
 
+def test_lang_is_read_from_the_language_section_only():
+    # Ogni prompt conversazionale ha una sezione `## Italian` fra gli esempi:
+    # cercare "italian" in tutto il system prompt rendeva italiana ogni risposta.
+    system = _sys("introduction", "english") + "\n# Examples\n\n## Italian\nBenvenuto\n"
+    assert llm_mock.lang_of(system) == "en"
+
+
+def test_real_prompt_in_english_stays_english():
+    from agents import prompts
+    assert llm_mock.lang_of(prompts.load("introduction", default_language="english")) == "en"
+    assert llm_mock.lang_of(prompts.load("introduction", default_language="italian")) == "it"
+
+
 def test_slug_and_lang():
     assert llm_mock.slug_of(_sys("introduction")) == "introduction"
     assert llm_mock.lang_of(_sys("x", "italian")) == "it"

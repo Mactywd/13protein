@@ -34,24 +34,33 @@ def slug_of(system: str) -> str | None:
 
 
 def lang_of(system: str) -> str:
-    return "it" if "italian" in system.lower() else "en"
+    """La lingua si legge SOLO dalla sezione `# Language` del prompt.
+
+    Cercare "italian" in tutto il system prompt sembrava equivalente e non lo
+    è: ogni prompt conversazionale ha una sezione `## Italian` fra gli esempi,
+    quindi ogni conversazione in inglese riceveva risposte in italiano."""
+    section = _section(system, "# Language")
+    return "it" if "italian" in section.lower() else "en"
 
 
 def _record() -> None:
     _usage.record(dict(_USAGE), model=MODEL)
 
 
-def _input_section(system: str) -> str:
-    """Il testo della sezione `# Input` del prompt, già riempita dal loader.
-
-    Si ferma alla sezione successiva (`# Examples`): prendere fino a fine file,
-    come farebbe un taglio ingenuo, si porterebbe dietro anche gli esempi."""
-    i = system.find("# Input")
+def _section(system: str, heading: str) -> str:
+    """Il testo di una sezione di primo livello del prompt, già riempita dal
+    loader. Si ferma alla sezione successiva: prendere fino a fine file, come
+    farebbe un taglio ingenuo, si porterebbe dietro tutto il resto."""
+    i = system.find(heading)
     if i < 0:
         return ""
-    rest = system[i + len("# Input"):]
+    rest = system[i + len(heading):]
     j = rest.find("\n# ")
     return (rest[:j] if j >= 0 else rest).strip()
+
+
+def _input_section(system: str) -> str:
+    return _section(system, "# Input")
 
 
 def _lead_bullets(system: str) -> str:
