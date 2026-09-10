@@ -1,0 +1,9 @@
+node_modules
+dist
+.git
+.netlify
+.claude
+.env
+.env.local
+*.log
+log.txt

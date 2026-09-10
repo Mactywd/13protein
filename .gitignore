@@ -4,5 +4,34 @@
 /*.csv
 # Intermedio rigenerabile
 .cache/
+
+# Node
+node_modules
+dist
+dist-ssr
+*.local
+*.log
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+.venv/
+venv/
+
+# Segreti e dati locali (analytics, utenti admin) — mai committare
+.env
+.env.*
+!.env.example
+!.env.*.example
+/data/
+backend/.env
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea
+.claude
+.DS_Store

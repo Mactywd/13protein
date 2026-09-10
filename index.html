@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- interactive-widget=resizes-content: all'apertura della tastiera virtuale
+         il default (resizes-visual) restringe solo il viewport *visuale*, quindi
+         100dvh resta invariato, la chat non si accorge di nulla e il browser
+         scrolla l'intera pagina per scoprire l'input: scrollbar globale. Con
+         resizes-content la tastiera restringe il viewport di *layout*, 100dvh
+         cala e, essendo .chat-container flex:1, si rimpicciolisce solo l'area
+         messaggi. Vedi CLAUDE.md, sezione layout della chat. -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, interactive-widget=resizes-content" />
+    <title>13 Protein · Assistant</title>
+    <meta name="description" content="Project assistant for 13 Protein, European B2B contract manufacturer of food supplements." />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

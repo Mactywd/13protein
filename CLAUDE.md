@@ -34,6 +34,11 @@ tools/extract_raw.py         stage 1 — whitelist delle tabelle
 tools/build_kb.py            stage 2 — markdown + bundle
 knowledgebase/               output generato, 312 KB — NON modificare a mano
 .cache/raw.json              intermedio, 5 MB — rigenerabile
+
+backend/                     FastAPI: state machine, agent, prompt, servizi
+server/                      Express: proxy SSE, admin, analytics, retention
+src/                         React/Vite: chat cliente e pannello admin
+docs/superpowers/            spec e piani di implementazione
 ```
 
 ## Rigenerare il knowledgebase
