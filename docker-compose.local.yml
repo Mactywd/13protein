@@ -1,0 +1,114 @@
+# Stack completo in locale (senza Traefik). Rispecchia docker-compose.prod.yml ma:
+#   - pubblica ogni servizio su 127.0.0.1 invece di passare da Traefik
+#   - non usa la rete esterna `web` (tutto resta su `internal`)
+#   - punta il backend agli hostname dei servizi `postgres`/`qdrant` (i valori in
+#     backend/.env usano `localhost`, che un container non può raggiungere)
+#
+#   ./start.local.sh                      # app su http://localhost:3000
+#
+# Qdrant è opzionale: serve solo con RETRIEVAL_PROVIDER=qdrant. Sta nel profilo
+# `qdrant`, così il default (retrieval a parole chiave) non tira su un servizio
+# che nessuno interroga:
+#   docker compose -f docker-compose.local.yml --profile qdrant up -d
+#   docker compose -f docker-compose.local.yml exec backend \
+#       python -m scripts.migrate_kb --recreate   # una tantum, spende crediti
+#
+# Richiede ./.env (POSTGRES_*) e ./backend/.env (vuoto va bene: il default è mock).
+name: agent13_local
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BACKEND_URL=http://backend:8000
+      # L'auth admin è zero-config: il segreto di firma dei token è generato e
+      # persistito sul volume admin_data, e gli utenti si creano da CLI:
+      #   docker compose -f docker-compose.local.yml exec app \
+      #       node server/scripts/create-admin.js <username>
+      - ADMIN_USERS_FILE=/data/admin/users.json
+      - ANALYTICS_LOG=/data/analytics/events.jsonl
+      - RETENTION_ENABLED=${RETENTION_ENABLED:-true}
+      - RETENTION_DRY_RUN=${RETENTION_DRY_RUN:-true}
+      - RETENTION_ANALYTICS_DAYS=${RETENTION_ANALYTICS_DAYS:-425}
+    volumes:
+      - analytics_data:/data/analytics
+      - admin_data:/data/admin
+    depends_on:
+      - backend
+    networks:
+      - internal
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: uvicorn main:app --workers 2 --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    env_file: ./backend/.env
+    environment:
+      # Sovrascrive gli URL localhost di backend/.env con gli hostname di rete.
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-agent13}:${POSTGRES_PASSWORD:-changeme}@postgres:5432/agent13
+      - QDRANT_URL=http://qdrant:6333
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - RETRIEVAL_PROVIDER=${RETRIEVAL_PROVIDER:-keyword}
+      # Il knowledgebase è montato in sola lettura: è output generato dalla
+      # pipeline in tools/, non si modifica dal container.
+      - KB_PATH=/app/knowledgebase/knowledgebase.jsonl
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./knowledgebase:/app/knowledgebase:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: agent13
+      POSTGRES_USER: ${POSTGRES_USER:-agent13}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agent13}"]
+      interval: 5s
+      retries: 5
+    networks:
+      - internal
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    profiles: ["qdrant"]
+    restart: unless-stopped
+    environment:
+      # Qdrant invia telemetria anonima di default: disattivata.
+      QDRANT__TELEMETRY_DISABLED: "true"
+    ports:
+      - "127.0.0.1:6333:6333"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - internal
+
+networks:
+  internal:
+
+volumes:
+  analytics_data:
+  admin_data:
+  postgres_data:
+  qdrant_data:

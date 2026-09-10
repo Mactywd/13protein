@@ -1,0 +1,135 @@
+# Deploy completo. Serve l'app Node (UI + proxy /api) dietro il Traefik condiviso
+# sulla rete esterna `web`, con backend Python, Postgres e Qdrant privati su una
+# rete interna.
+#
+#   docker compose -f docker-compose.prod.yml up -d --build
+#
+# Richiede:
+#   - la rete docker esterna `web` (quella di Traefik)
+#   - ./.env          (POSTGRES_*, DOMAIN)
+#   - ./backend/.env  (OPENROUTER_API_KEY se LLM_PROVIDER=openrouter)
+#
+# ⚠️ Non eseguito né verificato: in questa fase l'agente è un harness mock e non
+# esiste un ambiente di destinazione. Prima di pubblicarlo davvero servono
+# l'informativa privacy (oggi segnaposto) e i termini di retention decisi.
+name: agent13_prod
+
+# I log dei container non hanno un ciclo di vita proprio: con il driver json-file
+# di default crescono senza limite. Docker ruota per dimensione, non per età.
+# ⚠️ I log di accesso di Traefik (quelli con gli IP) vivono fuori da questo file,
+# sul server: la loro rotazione va verificata lì.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    logging: *default-logging
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - BACKEND_URL=http://backend:8000
+      # L'auth admin è zero-config: il segreto di firma dei token è generato e
+      # persistito sul volume admin_data, e gli utenti si creano da CLI:
+      #   docker compose -f docker-compose.prod.yml exec app \
+      #       node server/scripts/create-admin.js <username>
+      - ADMIN_USERS_FILE=/data/admin/users.json
+      - ANALYTICS_LOG=/data/analytics/events.jsonl
+      # Retention, metà su disco (art. 5.1.e GDPR). Il container non vede ./.env
+      # se le variabili non sono elencate qui. Dry run finché i termini non sono
+      # decisi con il titolare.
+      - RETENTION_ENABLED=${RETENTION_ENABLED:-true}
+      - RETENTION_DRY_RUN=${RETENTION_DRY_RUN:-true}
+      - RETENTION_ANALYTICS_DAYS=${RETENTION_ANALYTICS_DAYS:-425}
+    volumes:
+      - analytics_data:/data/analytics
+      - admin_data:/data/admin
+    depends_on:
+      - backend
+    networks:
+      - web
+      - internal
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"
+      - "traefik.http.routers.agent13.rule=Host(`${DOMAIN:-agent.example.com}`)"
+      - "traefik.http.routers.agent13.entrypoints=websecure"
+      - "traefik.http.routers.agent13.tls.certresolver=letsencrypt"
+      - "traefik.http.services.agent13.loadbalancer.server.port=3000"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    command: uvicorn main:app --workers 2 --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    logging: *default-logging
+    env_file: ./backend/.env
+    environment:
+      # La politica di retention si decide UNA volta, nella ./.env di root, e da
+      # lì raggiunge entrambe le metà del purge: senza questo blocco il backend
+      # vedrebbe solo backend/.env e un dry run messo in root fermerebbe le
+      # cancellazioni su disco lasciando correre quelle su Postgres.
+      # `environment:` vince su `env_file:`.
+      - RETENTION_ENABLED=${RETENTION_ENABLED:-true}
+      - RETENTION_DRY_RUN=${RETENTION_DRY_RUN:-true}
+      - RETENTION_CONTENT_DAYS=${RETENTION_CONTENT_DAYS:-730}
+      - RETENTION_SESSION_DAYS=${RETENTION_SESSION_DAYS:-730}
+      - LLM_PROVIDER=${LLM_PROVIDER:-mock}
+      - RETRIEVAL_PROVIDER=${RETRIEVAL_PROVIDER:-keyword}
+      - KB_PATH=/app/knowledgebase/knowledgebase.jsonl
+    volumes:
+      - ./knowledgebase:/app/knowledgebase:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - internal
+
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    logging: *default-logging
+    environment:
+      POSTGRES_DB: agent13
+      POSTGRES_USER: ${POSTGRES_USER:-agent13}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/scripts/init_db.sql:/docker-entrypoint-initdb.d/init_db.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-agent13}"]
+      interval: 5s
+      retries: 5
+    networks:
+      - internal
+
+  qdrant:
+    image: qdrant/qdrant:latest
+    profiles: ["qdrant"]
+    restart: unless-stopped
+    logging: *default-logging
+    environment:
+      # Qdrant invia telemetria anonima di default: disattivata.
+      QDRANT__TELEMETRY_DISABLED: "true"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    networks:
+      - internal
+
+networks:
+  web:
+    external: true
+  internal:
+
+volumes:
+  analytics_data:
+  admin_data:
+  postgres_data:
+  qdrant_data:
