@@ -5,9 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  // "Landing Alchimista/" è il mockup di riferimento esportato da Claude
-  // Design: materiale sorgente, non codice dell'app.
-  globalIgnores(['dist', 'Landing Alchimista']),
+  globalIgnores(['dist']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [
