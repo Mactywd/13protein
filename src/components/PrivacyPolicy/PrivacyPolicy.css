@@ -1,0 +1,32 @@
+.privacy-page {
+	padding: 40px 16px 80px;
+}
+
+.privacy-container {
+	max-width: 760px;
+	margin: 0 auto;
+	line-height: 1.6;
+}
+
+.privacy-back {
+	display: inline-block;
+	margin-bottom: 24px;
+	font-size: 0.9rem;
+}
+
+.privacy-updated {
+	opacity: 0.7;
+	font-size: 0.9rem;
+	margin-top: -8px;
+}
+
+.privacy-intro {
+	padding: 12px 16px;
+	border-left: 3px solid currentColor;
+	opacity: 0.85;
+}
+
+.privacy-container h2 {
+	margin-top: 32px;
+	font-size: 1.15rem;
+}

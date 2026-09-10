@@ -1,0 +1,339 @@
+/* ================================
+    CSS CUSTOM PROPERTIES (VARIABLES)
+    ================================ */
+    :root {
+        /* Colors - NEW PALETTE */
+        --color-primary: #A85C4D;  /* Terracotta Toscana */
+        --color-primary-light: #B97264;  /* Lighter terracotta variant */
+        --color-primary-dark: #8F4A3E;  /* Darker terracotta variant */
+        --color-bg-primary: #F7F4EF;  /* Crema Luminosa */
+        --color-bg-secondary: #EDE8E0;  /* Slightly darker cream */
+        --color-bg-tertiary: #E0D8CC;  /* Even darker cream for depth */
+        --color-bg-dark: #596B5F;  /* Verde Olivo */
+        --color-bg-darker: #4A5A50;  /* Darker olive green */
+        --color-text-primary: #333333;  /* Grigio Carbone */
+        --color-text-secondary: #8A8A8A;  /* Grigio Pietra Calda */
+        --color-wood-primary: #C0A980;  /* Oro Antico */
+        --color-wood-secondary: #D1C6D7;  /* Lavanda Sottile */
+        --color-wood-tertiary: #B5A48C;  /* Neutral gold variant */
+        
+        /* Spacing */
+        --spacing-xs: 8px;
+        --spacing-sm: 15px;
+        --spacing-md: 20px;
+        --spacing-lg: 25px;
+        --spacing-xl: 40px;
+        --spacing-xxl: 60px;
+        
+        /* Border radius */
+        --radius-sm: 10px;
+        --radius-md: 15px;
+        --radius-lg: 20px;
+        --radius-xl: 25px;
+        --radius-full: 50px;
+        
+        /* Transitions */
+        --transition-fast: 0.3s ease;
+        --transition-medium: 0.4s ease;
+        --transition-slow: 0.6s ease;
+        
+        /* Shadows - Updated for light theme */
+        --shadow-light: 0 5px 15px rgba(51, 51, 51, 0.1);
+        --shadow-medium: 0 8px 25px rgba(51, 51, 51, 0.15);
+        --shadow-heavy: 0 15px 40px rgba(51, 51, 51, 0.2);
+        --shadow-glow: 0 0 20px rgba(168, 92, 77, 0.2);  /* Terracotta glow */
+        
+        /* Typography */
+        --font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        --font-size-xs: 0.75rem;
+        --font-size-sm: 0.9rem;
+        --font-size-base: 1rem;
+        --font-size-lg: 1.1rem;
+        --font-size-xl: 1.2rem;
+        --font-size-2xl: 1.4rem;
+        --font-size-3xl: 2.2rem;
+        --font-size-4xl: 2.8rem;
+        --font-size-5xl: 4.5rem;
+    }
+    
+    /* ================================
+        BASE STYLES & RESET
+        ================================ */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    html {
+        scroll-behavior: smooth;
+    }
+    
+    body {
+        font-family: var(--font-family);
+        background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-tertiary) 100%);
+        color: var(--color-text-primary);
+        overflow-x: hidden;
+        line-height: 1.6;
+    }
+    
+    /* ================================
+        ANIMATIONS & KEYFRAMES
+        ================================ */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes shimmer {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes bounce {
+        0%, 20%, 50%, 80%, 100% {
+            transform: translateX(-50%) translateY(0);
+        }
+        40% {
+            transform: translateX(-50%) translateY(-10px);
+        }
+        60% {
+            transform: translateX(-50%) translateY(-5px);
+        }
+    }
+    
+    /* ================================
+        SHARED COMPONENT STYLES
+        ================================ */
+    
+    /* Container */
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+    }
+    
+    /* Section Titles */
+    .section-title {
+        text-align: center;
+        font-size: var(--font-size-4xl);
+        margin-bottom: var(--spacing-xxl);
+        color: var(--color-primary);
+        font-style: italic;
+        text-shadow: 1px 1px 2px rgba(51, 51, 51, 0.1); /* Lightened shadow */
+    }
+    
+    /* Buttons */
+    .btn {
+        font-family: var(--font-family);
+        font-weight: bold;
+        cursor: pointer;
+        transition: all var(--transition-medium);
+        position: relative;
+        overflow: hidden;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+    }
+    
+    .btn:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        transition: left var(--transition-slow);
+    }
+    
+    .btn:hover:before {
+        left: 100%;
+    }
+    
+    .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+    
+    .btn-primary {
+        background: linear-gradient(45deg, var(--color-wood-primary), var(--color-wood-secondary), var(--color-wood-tertiary));
+        border: 2px solid var(--color-primary);
+        color: var(--color-text-primary);
+    }
+    
+    .btn-primary:hover:not(:disabled) {
+        background: linear-gradient(45deg, var(--color-wood-primary), #C0A980); /* Uses Oro Antico */
+        border-color: #C0A980;
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(192, 169, 128, 0.3); /* Gold shadow */
+    }
+    
+    .btn-secondary {
+        background: linear-gradient(45deg, var(--color-wood-primary), var(--color-wood-secondary));
+        border: 2px solid var(--color-primary);
+        color: var(--color-text-primary);
+    }
+    
+    .btn-secondary:hover:not(:disabled) {
+        background: linear-gradient(45deg, #C0A980, var(--color-primary)); /* Oro Antico to Terracotta */
+    }
+    
+    .btn-gold {
+        background: linear-gradient(45deg, #C0A980, #B5A48C); /* Oro Antico gradient */
+        color: var(--color-bg-primary);
+    }
+    
+    .btn-gold:hover:not(:disabled) {
+        background: linear-gradient(45deg, #D4C19A, #C0A980); /* Lighter gold hover */
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(192, 169, 128, 0.4);
+    }
+    
+    /* Input Fields */
+    .input {
+        font-family: var(--font-family);
+        background: rgba(255, 255, 255, 0.9); /* White background for inputs */
+        border: 2px solid rgba(168, 92, 77, 0.4);
+        color: var(--color-text-primary); /* Dark text */
+        transition: all var(--transition-fast);
+    }
+    
+    .input:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 15px rgba(168, 92, 77, 0.2);
+        background: rgba(255, 255, 255, 1); /* Full white on focus */
+    }
+    
+    .input:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        background: rgba(237, 232, 224, 0.5);
+    }
+    
+    .input::placeholder {
+        color: rgba(138, 138, 138, 0.7); /* Gray placeholder text */
+        font-style: italic;
+    }
+    
+    /* Cards */
+    .card {
+        background: rgba(255, 255, 255, 0.95); /* White cards */
+        border: 2px solid rgba(168, 92, 77, 0.2);
+        border-radius: var(--radius-md);
+        backdrop-filter: blur(10px);
+        transition: all var(--transition-fast);
+    }
+    
+    .card:hover {
+        border-color: #C0A980; /* Oro Antico border on hover */
+        box-shadow: 0 0 20px rgba(192, 169, 128, 0.3);
+    }
+    
+    /* Scroll arrow for sections */
+    .scroll-arrow {
+        position: absolute;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+		background: linear-gradient(45deg, rgba(227, 8, 8, 0.511), rgba(135, 7, 7, 0.528));
+        color: var(--color-bg-primary);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        cursor: pointer;
+        box-shadow: var(--shadow-medium);
+        transition: all var(--transition-medium);
+        animation: bounce 2s infinite;
+        z-index: 10;
+    }
+    
+    .scroll-arrow:hover {
+        background: linear-gradient(45deg, #C0A980, var(--color-primary)); /* Oro Antico hover */
+        transform: translateX(-50%) scale(1.1);
+        box-shadow: 0 0 20px rgba(192, 169, 128, 0.4), var(--shadow-medium);
+    }
+    
+    .scroll-arrow:active {
+        transform: translateX(-50%) scale(0.95);
+    }
+    
+    /* ================================
+        SCROLLBAR STYLING
+        ================================ */
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(237, 232, 224, 0.5); /* Light track */
+        border-radius: var(--radius-sm);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: rgba(168, 92, 77, 0.4); /* Terracotta thumb */
+        border-radius: var(--radius-sm);
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: rgba(168, 92, 77, 0.6);
+    }
+    
+    /* ================================
+        RESPONSIVE DESIGN
+        ================================ */
+    
+    /* Mobile */
+    @media (max-width: 768px) {
+        :root {
+            --font-size-5xl: 3rem;
+            --font-size-2xl: 1.2rem;
+            --font-size-3xl: 1.8rem;
+            --font-size-4xl: 2.2rem;
+        }
+        
+        .container {
+            padding: 0;
+        }
+        
+        .scroll-arrow {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            bottom: 50px;
+        }
+    }
+    
+    /* Small mobile */
+    @media (max-width: 480px) {
+        .scroll-arrow {
+            width: 45px;
+            height: 45px;
+            font-size: 18px;
+        }
+    }
+
+    /* La regola .cta-ai-note stava qui, scritta per un Hero che rendeva la nota
+       AI Act e che non esiste più (la nota è stata spostata sotto la CTA finale
+       il 20.8.2026). Nessun JSX la applicava, mentre il commento dichiarava
+       "Usata da Hero e CTABlock": una regola morta che prometteva un requisito
+       di contrasto senza applicarlo a niente. L'invariante ora vive dove la
+       nota vive davvero — LandingPage.css, .landing-ai-note. */

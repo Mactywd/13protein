@@ -1,0 +1,224 @@
+/* ================================
+    CHAT SECTION
+    ================================ */
+    .chat-section {
+        /* Su mobile 100vh e' l'altezza del viewport *grande* (barra URL
+           esclusa): la sezione sborda sotto la barra e il documento scrolla
+           per qualche decina di px. 100dvh segue il viewport realmente
+           visibile; 100vh resta come fallback per browser senza unita'
+           dinamiche. */
+        height: 100vh;
+        height: 100dvh;
+        background: linear-gradient(180deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%);
+        position: relative;
+        z-index: 2;
+        box-sizing: border-box;
+    }
+
+    /* Un solo contenitore scrollabile: la lista dei messaggi. Il box esterno
+       non deve scrollare, altrimenti gli scroll si sommano. min-height:0 serve
+       perche' un flex item, di default, non si restringe sotto la dimensione
+       del proprio contenuto e spingerebbe fuori il layout invece di scrollare
+       al suo interno. */
+    /* Colonna flex a tutta altezza, su ogni schermo. Prima queste regole
+       valevano solo sotto i 768px: sopra, il box della chat era alto 80vh
+       fissi e su una finestra bassa (o un telefono in orizzontale: 844x390
+       usa il layout desktop) titolo + box + nota superavano il viewport e la
+       pagina scrollava di qualche decina di px. Da colonna flex il box si
+       stringe da solo e gli 80vh restano solo dove ci stanno.
+       Scoped a `.chat-section`: `.container` e' una classe condivisa. */
+    .chat-section > .container {
+        height: 100%;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        /* Quando il box non riempie la sezione (schermo basso, titolo nascosto)
+           lo spazio residuo va diviso sopra e sotto invece di finire tutto in
+           fondo. Dove il contenuto riempie — mobile e desktop — non fa nulla. */
+        justify-content: center;
+        overflow: hidden;
+    }
+
+    .chat-container { overflow: hidden; min-height: 0; }
+    .chat-messages { position: relative; min-height: 0; }
+    .chat-end-spacer { flex: 0 0 auto; } /* ensure it participates in layout */
+
+    /* Schermi bassi (telefono in orizzontale: 844x390 e' largo, quindi non
+       entra nella media query mobile qui sotto). Il titolo mangia ~180px dei
+       390 disponibili e lascia alla conversazione una fessura: meglio toglierlo
+       e dare l'altezza alla chat. */
+    @media (max-height: 600px) {
+        .chat-section .section-title { display: none; }
+    }
+
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .section-title {
+            display: none;
+            font-size: var(--font-size-3xl);
+            padding: 1.5rem 0;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+        .chat-section {
+            height: 100vh;
+            height: 100dvh;
+            /* Su mobile la chat e' a tutto schermo: la sezione prende lo stesso
+               fondo del box (che qui sotto diventa trasparente) cosi' la
+               superficie e' unica e non si vedono bande di fondo pagina sopra
+               la prima bolla e sotto la nota AI. */
+            background: #FFFFFF;
+        }
+
+        .chat-section .chat-container {
+            background: transparent;
+        }
+
+        /* Il pulsante ↻ galleggia sull'angolo in alto a destra: senza questo
+           spazio la prima riga del primo messaggio ci finisce sotto. */
+        .chat-messages > div:first-child {
+            padding-right: 3.25rem;
+        }
+    }
+.chat-container { position: relative; }
+.chat-header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+}
+
+/* AI Act art. 50.1 + rinvio all'informativa. Vive nello spazio sotto la barra
+   di input, fuori dal box della chat. Requisiti: testo reale nel DOM (leggibile
+   da screen reader), contrasto >= 4.5:1, sempre visibile — niente opacity
+   ridotta o grigio tenue. Vedi docs/compliance-checklist.md → C1. */
+.chat-ai-disclosure {
+	margin: 0.6rem auto 0;
+	/* Niente cap in `ch`: la nota e' una riga sola, non un paragrafo da leggere,
+	   e un limite di misura la mandava a capo anche con mezzo schermo libero
+	   accanto (65ch a 0.68rem sono ~293px su un telefono da 390). Il limite ora
+	   e' la larghezza disponibile. */
+	max-width: 100%;
+	text-align: center;
+	font-size: 0.72rem;
+	line-height: 1.4;
+	/* NON usare --color-text-secondary (#8A8A8A): su fondo crema dà ~3.1:1 e
+	   fallisce il requisito di contrasto >= 4.5:1 dell'art. 50.5. */
+	color: var(--color-text-primary);
+}
+
+.chat-ai-disclosure a {
+	color: var(--color-primary);
+	text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+	.chat-ai-disclosure {
+		/* la barra di input ha gia' 20px di margin-bottom su mobile */
+		margin-top: 0;
+		padding: 0 0.5rem 0.5rem;
+		/* NIENTE `white-space: nowrap` qui. C'e' stato, per tenere la nota su una
+		   riga sola, ed era tarato male: la misura ("~27x la font-size, ~81%
+		   della larghezza") veniva da Chromium su Linux, che non ha Georgia e
+		   la sostituisce con un serif piu' stretto. Con le metriche vere la
+		   riga arriva al 101% dello spazio disponibile a 360px, e con lo
+		   scaling del testo dei browser mobili (Firefox Android: Impostazioni →
+		   Accessibilita' → Dimensione carattere) va ben oltre: nowrap non la
+		   mandava a capo, la faceva *tagliare* — e centrata, quindi da entrambi
+		   i lati. Un avviso ex art. 50.1 tagliato non e' un problema estetico.
+		   Andare a capo ora e' gratis: `.chat-section > .container` e' una
+		   colonna flex a ogni larghezza e il box della chat e' `flex: 1`,
+		   quindi la riga in piu' se la prende lui restringendosi. Dove il font
+		   e' stretto la nota resta comunque su una riga da sola. */
+		font-size: min(0.68rem, 3vw);
+	}
+}
+/* Pinned to the top-right corner of the conversation box, floating above the
+   messages (the chat-container scrolls underneath it). */
+.reload-button {
+	position: absolute;
+	top: 0.75rem;
+	right: 0.75rem;
+	z-index: 5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	background: var(--color-bg-primary);
+	border: 1px solid var(--color-primary);
+	color: var(--color-primary);
+	font-size: 1.3rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0;
+	border-radius: 50%;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+	transition: background 0.2s, color 0.2s, transform 0.2s;
+}
+.reload-button:hover {
+	background: var(--color-primary);
+	color: var(--color-bg-primary);
+	transform: rotate(90deg);
+}
+.skip-button {
+	position: absolute;
+	top: 0.75rem;
+	right: 3.5rem;
+	z-index: 5;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 2.25rem;
+	height: 2.25rem;
+	background: var(--color-bg-primary);
+	border: 1px solid var(--color-primary);
+	color: var(--color-primary);
+	font-size: 1.1rem;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0;
+	border-radius: 50%;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+	transition: background 0.2s, color 0.2s;
+}
+.skip-button:hover {
+	background: var(--color-primary);
+	color: var(--color-bg-primary);
+}
+.reload-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.5);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1000;
+}
+.reload-modal {
+	background: #fff;
+	padding: 1.5rem;
+	border-radius: 12px;
+	max-width: 360px;
+	width: calc(100% - 2rem);
+	text-align: center;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.reload-modal-actions {
+	display: flex;
+	gap: 0.75rem;
+	margin-top: 1.25rem;
+}
+.reload-modal-actions button {
+	flex: 1;
+	padding: 0.6rem 1rem;
+	border-radius: 8px;
+	cursor: pointer;
+	border: 1px solid #ccc;
+}
+.reload-modal-confirm {
+	background: #d97a7a;
+	color: #fff;
+	border-color: #d97a7a;
+}

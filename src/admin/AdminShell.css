@@ -1,0 +1,96 @@
+.admin-shell-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 50%, var(--color-bg-tertiary) 100%);
+  padding: 20px;
+}
+.admin-shell-login-box {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 320px;
+  padding: 40px 36px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(168, 92, 77, 0.18);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-medium);
+  font-family: var(--font-family);
+}
+.admin-shell-login-box h1 {
+  margin: 0 0 6px;
+  text-align: center;
+  color: var(--color-primary);
+  font-style: italic;
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+}
+.admin-shell-login-box input {
+  padding: 11px 13px;
+  border: 1px solid rgba(168, 92, 77, 0.35);
+  border-radius: 8px;
+  font-size: 15px;
+  font-family: var(--font-family);
+  background: #fff;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.admin-shell-login-box input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(168, 92, 77, 0.15);
+}
+.admin-shell-login-box button {
+  margin-top: 4px;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: var(--color-primary);
+  color: #fff;
+  font-size: 15px;
+  letter-spacing: .03em;
+  cursor: pointer;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.admin-shell-login-box button:hover:not(:disabled) { background: var(--color-primary-dark); transform: translateY(-1px); }
+.admin-shell-login-box button:disabled { opacity: 0.6; cursor: default; }
+.admin-shell-error { color: #b00020; font-size: 14px; text-align: center; }
+
+.admin-shell-nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 10px 24px;
+  border-bottom: 1px solid rgba(168, 92, 77, 0.18);
+  background: var(--color-bg-primary);
+}
+.admin-shell-brand { display: flex; align-items: center; }
+.admin-shell-brand { font-weight: 700; letter-spacing: 0.02em; }
+.admin-shell-tabs { display: flex; gap: 8px; }
+.admin-shell-tab {
+  display: inline-block;
+  padding: 8px 18px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-text-primary);
+  cursor: pointer;
+  font-size: 15px;
+  font-family: var(--font-family);
+  text-decoration: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.admin-shell-tab:hover { background: var(--color-bg-secondary); }
+.admin-shell-tab.active { background: var(--color-primary); color: #fff; }
+.admin-shell-user { display: flex; align-items: center; gap: 12px; font-size: 14px; margin-left: auto; color: var(--color-text-primary); }
+.admin-shell-user button {
+  padding: 7px 14px;
+  border: 1px solid rgba(168, 92, 77, 0.4);
+  border-radius: var(--radius-full);
+  background: transparent;
+  color: var(--color-primary);
+  cursor: pointer;
+  font-family: var(--font-family);
+  transition: background var(--transition-fast);
+}
+.admin-shell-user button:hover { background: var(--color-bg-secondary); }

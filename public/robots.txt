@@ -1,0 +1,4 @@
+# Segnaposto: l'assistente non è pubblico. Finché l'informativa non è redatta
+# e il deployment non è deciso, nessun crawler.
+User-agent: *
+Disallow: /

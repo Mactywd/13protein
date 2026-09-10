@@ -1,0 +1,314 @@
+/* ================================
+    MESSAGE STYLES
+    ================================ */
+    .message {
+        margin-bottom: var(--spacing-lg);
+        padding: 18px var(--spacing-lg);
+        border-radius: var(--radius-md);
+        max-width: 80%;
+        line-height: 1.7;
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    .message.ai {
+        background: linear-gradient(135deg, rgba(89, 107, 95, 0.1), rgba(192, 169, 128, 0.1));
+        border: 1px solid rgba(168, 92, 77, 0.3);
+        align-self: flex-start;
+    }
+    
+    .message.user {
+        background: linear-gradient(135deg, rgba(209, 198, 215, 0.15), rgba(237, 232, 224, 0.2));
+        border: 1px solid rgba(168, 92, 77, 0.2);
+        align-self: flex-end;
+        margin-left: auto;
+    }
+    
+    .message.ai-message {
+        max-width: 100%;
+    }
+    
+    .message p {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        max-width: 95dvw;
+    }
+    
+    /* ================================
+        MESSAGE BUTTONS
+        ================================ */
+    .message-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--spacing-sm);
+        justify-content: center;
+        margin-top: var(--spacing-lg);
+        margin-left: var(--spacing-sm);
+    }
+    
+    .message-buttons.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+    
+    .message.ai.buttons-only,
+    .message.ai.carousel-only {
+        background: none;
+        border: none;
+        padding: 0;
+        margin-top: -35px;
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .message.ai.buttons-only {
+        /* max-width: 100%; */
+        width: 100%;
+    }
+    
+    .message.ai.has-buttons {
+        margin-bottom: 5px;
+    }
+    
+    .message-button {
+        padding: var(--spacing-sm) var(--spacing-md);
+        border-radius: var(--radius-lg);
+        font-size: var(--font-size-sm);
+    }
+    
+    .message-button:hover {
+        background: linear-gradient(45deg, #C0A980, var(--color-primary));
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(192, 169, 128, 0.3);
+    }
+
+    .message-button.custom-btn {
+        background: linear-gradient(135deg, #be2020, #7d0707) !important;
+        color: white !important;
+        font-weight: bold;
+        box-shadow: 0 4px 16px rgba(168, 92, 77, 0.4);
+        transform: scale(1.05);
+        border: 1px solid #ef7777;
+        min-width: 50%;
+    }
+    .message-button.custom-btn:hover {
+        background: linear-gradient(45deg, #ef7777, #be2020) !important;
+        box-shadow: 0 6px 20px rgba(237, 119, 119, 0.5);
+        transform: scale(1.1) translateY(-2px);
+    }
+    
+    /* ================================
+        MESSAGE CAROUSEL
+        ================================ */
+    .message-carousel {
+        display: flex;
+        gap: var(--spacing-sm);
+        overflow-x: auto;
+        padding: var(--spacing-sm) 0;
+        margin-top: var(--spacing-sm);
+    }
+    
+    .message-card {
+        min-width: 250px;
+        width: 250px;
+        background: rgba(247, 244, 239, 0.9);
+        border: 2px solid rgba(168, 92, 77, 0.3);
+        border-radius: var(--radius-md);
+        padding: var(--spacing-md);
+        flex-shrink: 0;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        position: relative;
+    }
+    
+    .message-card:hover {
+        transform: translateY(-5px);
+        border-color: #C0A980; /* Oro Antico border on hover */
+        box-shadow: 0 8px 20px rgba(192, 169, 128, 0.3);
+    }
+
+    .message.ai.carousel-only:has(.message-card.showcase) {
+        justify-content: center;
+        display: flex;
+        width: 100%;
+    }
+    
+    .message-card.selected {
+        border-color: var(--color-primary);
+        box-shadow: 0 0 20px rgba(168, 92, 77, 0.3);
+        transform: translateY(-3px);
+    }
+    
+    .message-card.dimmed {
+        opacity: 0.5;
+        transform: scale(0.95);
+        cursor: not-allowed;
+    }
+    
+    .message-card.dimmed:hover {
+        transform: scale(0.95);
+        box-shadow: none;
+    }
+    
+    .card-image {
+        width: 100%;
+        height: 150px;
+        object-fit: cover;
+        border-radius: var(--radius-sm);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .card-title {
+        font-size: var(--font-size-lg);
+        font-weight: bold;
+        color: var(--color-primary);
+        margin-bottom: var(--spacing-sm);
+    }
+    
+    .card-description {
+        font-size: var(--font-size-sm);
+        margin-bottom: var(--spacing-sm);
+        opacity: 0.9;
+        word-wrap: break-word;
+        white-space: pre-wrap;
+    }
+    
+    /* ================================
+        TYPING INDICATOR
+        ================================ */
+    @keyframes cursorBlink {
+        0%, 50% {
+            opacity: 1;
+        }
+        50.01%, 100% {
+            opacity: 0;
+        }
+    }
+
+    .typing-indicator {
+        align-self: flex-start;
+        max-width: 80%;
+        margin-bottom: var(--spacing-lg);
+        padding: 18px var(--spacing-lg);
+        border-radius: var(--radius-md);
+        background: linear-gradient(135deg, rgba(89, 107, 95, 0.1), rgba(192, 169, 128, 0.1));
+        border: 1px solid rgba(168, 92, 77, 0.3);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        font-style: italic;
+        opacity: 0.8;
+        animation: fadeIn 0.5s ease-in;
+    }
+    
+    .typing-cursor {
+        display: inline-block;
+        width: 2px;
+        height: 1.1em;
+        margin-left: 2px;
+        vertical-align: text-bottom;
+        background: var(--color-primary);
+        animation: cursorBlink 1s step-end infinite;
+    }
+    
+    /* Mobile responsive */
+    @media (max-width: 768px) {
+        .message.ai {
+            max-width: 100%;
+            padding: 0;
+            font-size: 1rem;
+            line-height: 1.8;
+            background: transparent;
+            border: none;
+            color: var(--color-text-primary); /* Ensure dark text */
+        }
+        .message.user {
+            padding: 15px;
+        }
+        .message.ai.buttons-only {
+            width: 100%;
+        }
+
+        .message-buttons {
+            margin-left: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .message-button {
+            font-size: 0.8rem;
+            padding: 10px;
+            border-radius: 10px;
+            white-space: no-wrap;
+            min-width: max-content;
+        }
+        .message-button.btn-secondary {
+            background: linear-gradient(45deg, rgba(209, 198, 215, 0.3), rgba(192, 169, 128, 0.2));
+            border: 1px solid rgba(168, 92, 77, 0.3);
+            color: var(--color-text-primary);
+        }
+
+        .message.ai.carousel-only {
+            width: 100%;
+        }
+
+        .message-carousel {
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr ;
+        }
+
+        .message-carousel:has(.message-card.showcase) {
+            grid-template-columns: 1fr ;
+            justify-items: center;
+        }
+
+        .message-card {
+            min-width: auto;
+            width:auto;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .message-card img {
+            width: 100%;
+            height: 100px;
+            border-radius: 0;
+            margin-bottom: 0;
+        }
+        .message-card .card-title {
+            font-size: var(--font-size-sm);
+            text-align: center;
+            margin-bottom: 0px;
+        }
+        .message-card .card-description {
+            font-size: var(--font-size-xs);
+            margin-bottom: 0;
+            text-align: center;
+            margin: 10px;
+        }
+    }
+
+/* ================================
+    MESSAGE TOOLTIP
+    ================================ */
+.message.has-tooltip { position: relative; }
+
+.message.has-tooltip .message-tooltip {
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 0;
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    padding: 6px 10px;
+    background: rgba(20, 20, 20, 0.95);
+    color: #fff;
+    font-size: 11px;
+    line-height: 1.4;
+    white-space: nowrap;
+    border-radius: 6px;
+    z-index: 50;
+    pointer-events: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.message.has-tooltip:hover .message-tooltip { display: flex; }

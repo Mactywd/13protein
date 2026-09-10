@@ -1,0 +1,77 @@
+.resoconto-page { min-height: 100vh; padding: 2rem 1rem; background: #f7f4ef; }
+.resoconto-container { max-width: 900px; margin: 0 auto; }
+.resoconto-container h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.4rem; margin-bottom: .25rem; }
+.resoconto-subtitle { color: #6b6256; margin-bottom: 1.5rem; }
+.resoconto-form { display: flex; gap: 12px; align-items: end; margin-bottom: 20px; }
+.resoconto-form label { display: flex; flex-direction: column; font-size: 0.85rem; gap: 4px; color: var(--color-text-primary, #333); }
+.resoconto-form input {
+  padding: 6px 8px;
+  border: 1px solid var(--color-bg-tertiary, #ddd);
+  border-radius: 6px;
+  background: #fff;
+  font-family: inherit;
+}
+.resoconto-form input:focus { outline: none; border-color: var(--color-primary); box-shadow: 0 0 0 2px rgba(168,92,77,.15); }
+.resoconto-form button {
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.resoconto-form button:hover:not(:disabled) { background: var(--color-primary-dark); transform: translateY(-1px); }
+.resoconto-form button:disabled { opacity: .6; cursor: default; }
+.resoconto-error { color: #b02a37; }
+.resoconto-stats { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin-bottom: 20px; }
+.resoconto-stats div { background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.06); border-radius: 6px; padding: 10px 12px; }
+.resoconto-stats span { display: block; font-size: 0.75rem; color: #6b6256; }
+.resoconto-stats b { font-size: 1.2rem; }
+.resoconto-path-table { width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,.06); margin-bottom: 20px; }
+.resoconto-path-table th, .resoconto-path-table td { padding: .6rem .75rem; text-align: left; border-bottom: 1px solid #ece7df; font-size: .9rem; }
+.resoconto-path-table th { font-weight: 600; color: #6b6256; }
+.resoconto-text-block { background: #fff; border-radius: 6px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,.06); }
+.resoconto-text-block button {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+.resoconto-text-block pre { white-space: pre-wrap; background: #1e1e1e; color: #eee; padding: 16px; border-radius: 6px; font-size: 0.85rem; }
+.resoconto-section {
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, .06);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin-bottom: 18px;
+}
+.resoconto-section h2 { font-size: 1.15rem; margin-bottom: 10px; }
+.resoconto-section h3 { font-size: 0.95rem; margin: 12px 0 6px; }
+.resoconto-section .resoconto-stats { margin-bottom: 12px; }
+.resoconto-section .resoconto-stats div { box-shadow: none; background: var(--color-bg-primary, #f7f4ef); }
+.resoconto-section-note { color: #6b6256; font-size: 0.85rem; margin: 8px 0; }
+.resoconto-loading { color: #6b6256; font-size: 0.85rem; align-self: center; }
+.resoconto-generate { margin-top: 8px; text-align: center; }
+.resoconto-generate > button {
+  padding: 10px 28px;
+  border: none;
+  border-radius: var(--radius-full, 999px);
+  background: var(--color-primary);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+}
+.resoconto-generate > button:disabled { opacity: .6; cursor: default; }
+.resoconto-generate .resoconto-text-block { margin-top: 14px; text-align: left; }
+.resoconto-charts-2col { display: grid; grid-template-columns: 1fr; gap: 8px; }
+/* min-width:0 serve a recharts: senza, il ResponsiveContainer non si restringe
+   mai e la colonna della griglia continua a crescere. */
+.resoconto-charts-2col > div { min-width: 0; }
+@media (min-width: 720px) { .resoconto-charts-2col { grid-template-columns: 1fr 1fr; } }
