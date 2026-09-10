@@ -1,0 +1,42 @@
+{
+  "product_idea": {
+    "profile": "product_idea",
+    "category": "proteins",
+    "format": "powders",
+    "projectDescription": "Facsimile: una whey per il canale palestre sul mercato italiano, barattoli da 2 kg, gusti cioccolato e vaniglia, lancio in primavera.",
+    "questionsAsked": ["Are you certified?"],
+    "topicsCited": ["quality", "private-label"],
+    "quoteRequested": true,
+    "contact": {"name": "Mario Rossi", "company": "Rossi Nutrition", "email": "mario@example.com"}
+  },
+  "new_brand": {
+    "profile": "new_brand",
+    "category": "performance_and_training",
+    "format": "stick_packs",
+    "projectDescription": "Facsimile: linea pre-workout in stick pack per un nuovo brand DTC, primo lancio su tre referenze.",
+    "questionsAsked": ["What is the difference between private label and white label?"],
+    "topicsCited": ["private-label", "white-label"],
+    "quoteRequested": true,
+    "contact": {"name": "Giulia Bianchi", "company": "Nova Supplements", "email": "giulia@example.com"}
+  },
+  "supplement_brand": {
+    "profile": "supplement_brand",
+    "category": "health_and_wellness",
+    "format": "capsules_and_tablets",
+    "projectDescription": "Facsimile: brand già a scaffale che cerca un secondo produttore per capsule di integratori vitaminici.",
+    "questionsAsked": ["Do you handle packaging as well?"],
+    "topicsCited": ["services-manufacturing", "quality"],
+    "quoteRequested": true,
+    "contact": {"name": "Luca Verdi", "company": "Verdi Nutrition", "email": "luca@example.com"}
+  },
+  "manufacturing_partner": {
+    "profile": "manufacturing_partner",
+    "category": "drinks_shots_gels",
+    "format": "rtds",
+    "projectDescription": "Facsimile: distributore che cerca un partner produttivo europeo per una linea di shot funzionali.",
+    "questionsAsked": ["Where are your plants?"],
+    "topicsCited": ["about-us", "quality"],
+    "quoteRequested": true,
+    "contact": {"name": "Anna Neri", "company": "Neri Distribution", "email": "anna@example.com"}
+  }
+}
